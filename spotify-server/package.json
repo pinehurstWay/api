@@ -1,0 +1,54 @@
+{
+  "name": "spotify-server",
+  "version": "0.1.7",
+  "scripts": {
+    "start": "node spotify-server.js"
+  },
+  "dependencies": {
+    "spotify-web": "git://github.com/fuzeman/node-spotify-web.git#feature/ping-pong-fix",
+    "xml2js": "0.4.2",
+    "express": "3.1.1",
+    "ejs": "1.0.0",
+    "tinycolor": "0.0.1",
+    "express-session": "1.0.2",
+    "cookie-parser": "1.0.1"
+  },
+  "engines": {
+    "node": "0.10.24",
+    "npm": "1.4.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandtabbott/spotify-server"
+  },
+  "author": {
+    "name": "Brandt Abbott",
+    "email": "brandtabbott@hotmail.com"
+  },
+  "license": "MIT",
+  "description": "Spotify-Server",
+  "bugs": {
+    "url": "https://github.com/brandtabbott/spotify-server/issues"
+  },
+  "homepage": "https://github.com/brandtabbott/spotify-server",
+  "_id": "spotify-server@0.1.7",
+  "dist": {
+    "shasum": "4c6d4962eec7313ecb288a9a7cf3ceee2c4b4cb5",
+    "tarball": "http://registry.npmjs.org/spotify-server/-/spotify-server-0.1.7.tgz"
+  },
+  "_from": "spotify-server@*",
+  "_npmVersion": "1.4.6",
+  "_npmUser": {
+    "name": "brandtabbott",
+    "email": "brandtabbott@hotmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "brandtabbott",
+      "email": "brandtabbott@hotmail.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "4c6d4962eec7313ecb288a9a7cf3ceee2c4b4cb5",
+  "_resolved": "https://registry.npmjs.org/spotify-server/-/spotify-server-0.1.7.tgz"
+}
