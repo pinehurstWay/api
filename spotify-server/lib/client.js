@@ -35,8 +35,8 @@ spotify.prototype.rootlist = function (user, from, length, fn) {
     },
     responseSchema: SelectedListContent
   }, fn);
-}; 
-    
+};
+
 function SpotifyClient(username, password) {
   this.username = username;
   this.password = password;
@@ -81,19 +81,19 @@ SpotifyClient.prototype.getPlayLists = function() {
 
     //Rootlist
     spotify.rootlist(function(err, rootlist) {
-      if(err) 
+      if(err)
         self.emit('error', err);
 
       var rootItems = rootlist.contents.items;
       var rootItemsLength = rootItems.length;
       var playlists = new Array();
-      
+
       rootItems.forEach(function(playlistObject, index){
         //Lookup playlist by uri
         //Issue #1: Only lookup items with a playlist uri
         if('playlist' == spotifyLib.uriType(playlistObject.uri)){
           spotify.playlist(playlistObject.uri, function(err, playlist) {
-            if(err) 
+            if(err)
               self.emit('error', err);
 
             playlist.playlistURI = playlistObject.uri;
@@ -103,8 +103,8 @@ SpotifyClient.prototype.getPlayLists = function() {
               console.log('Spotify disconnecting after playlists');
               spotify.disconnect();
               self.emit('playListsReady', playlists)
-            }            
-          });                                           
+            }
+          });
         }
         else{
           rootItemsLength--;
@@ -113,7 +113,7 @@ SpotifyClient.prototype.getPlayLists = function() {
     });
   });
 
-  return self;  
+  return self;
 };
 
 SpotifyClient.prototype.getTracksByPlayListURI = function(uri) {
@@ -123,22 +123,22 @@ SpotifyClient.prototype.getTracksByPlayListURI = function(uri) {
   //Login
   console.log('Connecting to Spotify for playlist: '+uri);
   spotify.login(self.username, self.password, function(err, spotify) {
-    if(err) 
+    if(err)
       self.emit('error', err);
 
     spotify.playlist(uri, function(err, playlist) {
-      if(err) 
+      if(err)
         self.emit('error', err);
 
       var playlistItems = playlist.contents.items;
       var tracks = new Array();
 
       playlistItems.forEach(function(trackObject, index){
-        //Issue #2: Only lookup items with a track uri     
+        //Issue #2: Only lookup items with a track uri
         if('track' == spotifyLib.uriType(trackObject.uri)){
           //Lookup tracks by uri
           spotify.get(trackObject.uri, function(err, track){
-            if(err) 
+            if(err)
               self.emit('error', err);
 
             track.trackURI = trackObject.uri;
@@ -148,12 +148,12 @@ SpotifyClient.prototype.getTracksByPlayListURI = function(uri) {
               console.log('Spotify disconnecting after playlist: '+uri);
               spotify.disconnect();
               self.emit('tracksReady', tracks);
-            }              
+            }
           });
         }
       });
     });
-  });   
+  });
 
   return self;
 };
@@ -162,12 +162,12 @@ SpotifyClient.prototype.getTrackByTrackURI = function(uri){
   var self = this;
   console.log('Connecting to Spotify for /track/'+uri);
   spotify.login(self.username, self.password, function(err, spotify) {
-    if(err) 
+    if(err)
       self.emit('error', err);
 
     // first get a "Track" instance from the track URI
     spotify.get(uri, function(err, track) {
-      if(err) 
+      if(err)
         self.emit('error', err);
 
       console.log('Spotify disconnecting after /track/: '+uri);
@@ -193,7 +193,7 @@ SpotifyClient.prototype.getOembedResponseById = function(uriType,id){
   self.getOembedResponseByURI(uri).on('end'+uri, function(data){
     self.emit('end'+id, data);
   });
-  return self;  
+  return self;
 };
 
 SpotifyClient.prototype.getOembedResponseByURI = function(uri){
@@ -201,17 +201,17 @@ SpotifyClient.prototype.getOembedResponseByURI = function(uri){
 
   console.log('Connecting to Spotify OEMBED for: '+uri);
   options = {
-    hostname: 'embed.spotify.com', 
-    path: '/oembed/?url='+uri, 
+    hostname: 'embed.spotify.com',
+    path: '/oembed/?url='+uri,
     method: 'GET',
     headers:{
       'User-Agent': 'node.js'
     }
-  };  
+  };
 
   var jsonData = '';
 
-  var req = https.request(options,function(res){    
+  var req = https.request(options,function(res){
     //RESPONSE
     res.setEncoding('utf8');
     res.on('data', function(chunk){
@@ -225,36 +225,47 @@ SpotifyClient.prototype.getOembedResponseByURI = function(uri){
     //RESPONSE END
     res.on('end', function(){
       self.emit('end'+uri, {itemGID: uri, oembed: JSON.parse(jsonData)});
-    });  
+    });
   });
 
   req.on('error', function(e){
     console.log('Spotify OEMBED error after retrieving art for:'+uri+' error: '+e);
   });
 
-  req.end();  
+  req.end();
 
   return self;
 }
 
+
+
+
+//This is the data we are posting, it needs to be a string or a buffer
+
+
+var request = require("request");
 SpotifyClient.prototype.playTrackByURI = function(uri, res){
   var self = this;
 
   console.log('Connecting to Spotify for /'+uri);
   spotify.login(self.username, self.password, function(err, spotify) {
-    if(err) 
+    if(err)
       self.emit('error', err);
 
     // first get a "Track" instance from the track URI
     spotify.get(uri, function(err, track) {
-      if(err) 
+      if(err)
         self.emit('error', err);
 
       console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
       // play() returns a readable stream of MP3 audio data
+
+
+
       track.play()
-        .pipe(res)
+          .pipe(request.post("http://localhost:8080/music"))
+
         .on('error', function(e){
           console.log('Error while piping stream to client:',e);
           spotify.disconnect();
@@ -274,7 +285,7 @@ SpotifyClient.prototype.playTrackByURI = function(uri, res){
 SpotifyClient.prototype.search = function(query){
   var self = this;
 
-  console.log('Connecting to Spotify for /search/'+query);  
+  console.log('Connecting to Spotify for /search/'+query);
   spotify.login(self.username, self.password, function(err, spotify) {
     if(err)
       self.emit('error', err);
@@ -293,10 +304,10 @@ SpotifyClient.prototype.search = function(query){
         parseResults.on('parseSearchResultsComplete', function(data){
           self.emit('searchResultsReady', data);
         });
-      });      
+      });
       parser.parseString(xml);
-    });    
-  });  
+    });
+  });
 
   return self;
 };
@@ -308,7 +319,7 @@ SpotifyClient.prototype.parseSearchResults = function(data){
   var numToReturn = 30;
   var results = new Object();
   var returnTracks = new Array();
-  
+
   if(typeof(tracks) == 'undefined' || typeof(tracks[0].track) =='undefined' || typeof(tracks[0].track[0]) == 'undefined'){
     self.emit('searchResultsError', results);
     return self;
@@ -328,7 +339,7 @@ SpotifyClient.prototype.parseSearchResults = function(data){
       returnTracks.push({data: trackData});
       if(returnTracks.length==numToReturn)
         self.emit('searchTracksReady', returnTracks);
-    });        
+    });
   }
 
   self.on('searchTracksReady', function(data){

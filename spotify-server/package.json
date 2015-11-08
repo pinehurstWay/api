@@ -5,13 +5,15 @@
     "start": "node spotify-server.js"
   },
   "dependencies": {
-    "spotify-web": "git://github.com/fuzeman/node-spotify-web.git#feature/ping-pong-fix",
-    "xml2js": "0.4.2",
-    "express": "3.1.1",
+    "cookie-parser": "1.0.1",
     "ejs": "1.0.0",
-    "tinycolor": "0.0.1",
+    "express": "3.1.1",
     "express-session": "1.0.2",
-    "cookie-parser": "1.0.1"
+    "request": "^2.65.0",
+    "speaker": "^0.2.6",
+    "spotify-web": "git://github.com/fuzeman/node-spotify-web.git#feature/ping-pong-fix",
+    "tinycolor": "0.0.1",
+    "xml2js": "0.4.2"
   },
   "engines": {
     "node": "0.10.24",
