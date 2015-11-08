@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.13.3",
     "lame": "^1.2.3",
-    "pcm-volume": "^1.0.0"
+    "pcm-volume": "^1.0.0",
+    "speaker": "^0.2.6"
   }
 }

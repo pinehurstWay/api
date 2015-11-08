@@ -35,7 +35,8 @@ var encoder = new lame.Encoder({
 
 app.all('/music', function (req, res) {
     req.pipe(new lame.Decoder).pipe(new Speaker());
-    //.pipe(res)
+    //res.reply({"hello":"wol"})
+
 });
 
 
