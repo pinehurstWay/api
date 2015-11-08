@@ -254,9 +254,7 @@ SpotifyClient.prototype.playTrackByURI = function(uri, res){
 
       // play() returns a readable stream of MP3 audio data
       track.play()
-          .on("data",function(){
-            debugger
-          })
+        .pipe(res)
         .on('error', function(e){
           console.log('Error while piping stream to client:',e);
           spotify.disconnect();
