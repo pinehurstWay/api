@@ -242,29 +242,29 @@ SpotifyClient.prototype.getOembedResponseByURI = function (uri) {
 
 
 var request = require("request");
+
 SpotifyClient.prototype.playTrackByURI = function (uri, res) {
     var self = this;
 
     console.log('Connecting to Spotify for /' + uri);
     spotify.login(self.username, self.password, function (err, spotify) {
         if (err)
-            self.emit('error', err);
+            self.emit('error Spotify', err);
 
         // first get a "Track" instance from the track URI
         spotify.get(uri, function (err, track) {
             if (err)
-                self.emit('error', err);
+                self.emit('error Spotify', err);
 
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
             // play() returns a readable stream of MP3 audio data
 
+            var musicStream = track.play().pipe(new lame.Decoder);
 
-            var musicStream = track.play();
-
-            ["locahost", "192.168.0.1"].forEach(function (ip) {
+            ["localhost","192.168.1.24"].forEach(function (ip) {
                 musicStream
-                    .pipe(request.post("http://" + ip + ":8080/music"))
+                    .pipe(request.post("http://" + ip + ":9000/music"))
 
                     .on('error', function (e) {
                         console.log('Error while piping stream to client:', e);
