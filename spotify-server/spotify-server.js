@@ -1,22 +1,40 @@
 var express = require('express'),
     session = require('express-session');
-    cookieParser = require('cookie-parser');  
+    cookieParser = require('cookie-parser');
     http = require('http'),
+    cors = require('cors'),
     ejs = require('ejs'),
     path = require('path'),
     spotifyClient = require('./lib/client'),
-    color = require('tinycolor');
+    color = require('tinycolor')
+    corsOptions = {
+      orgin : 'http://localhost:4200'
+    };
 
 //Don't stop this server if an exception goes uncaught
 process.on('uncaughtException', function (err) {
   console.error((err.stack+'').red.bold);
   console.error('Node trying not to exit...'.red.bold);
-});     
+});
 
 var app = express();
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Credentials, Origin, Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
+  res.header('Access-Control-Allow-Credentials', true);
+
+  console.log(req.method);
+  if (req.method !== 'OPTIONS') {
+    console.log('add header');
+
+  }
+  next();
+});
+// app.use(require('cors'));
 app.set('view engine', 'ejs');
 app.use(cookieParser('asdklfjl43u8t943htinjgkrenseiro3u8urijoewfdkls'));
 app.use(session());
@@ -32,11 +50,19 @@ app.get('/spotify-server/logout', function(req,res){
   });
 });
 
+app.options('*', function (req, res) {
+  res.send({success: 'success'});
+})
+
 //Get login information
 app.get('/spotify-server/login/:usernameAndpassword', function(req, res){
   var up = req.params.usernameAndpassword;
+  console.log(up);
   var uname = up.split(':')[0];
   var pw = up.split(':')[1];
+  console.log(uname);
+  console.log(pw);
+  console.log('--------');
 
   if(req.session.loggedin && uname=='check'){
     res.send({success: 'success'});
@@ -82,20 +108,31 @@ app.get('/spotify-server/playlist/:playlistid', function(req, res){
   })
   .on('error', function(err){
     res.send({error: err});
-  }); 
+  });
 });
 
 //Retrieve a single track
-app.get('/spotify-server/track/:trackURI', function(req, res){
-  var uri = req.params.trackURI;
+app.get('/spotify-server/track', function(req, res){
+  var uri = req.query.uri;
 
-  spotifyClient.newInstance(req.session.username,req.session.password).getTrackByTrackURI(uri)
-  .on('trackReady', function(track){
-    res.send(track);
-  })
-  .on('error', function(err){
-    res.send({error: err});
-  });
+  if (req.query.searchType === 'playlist') {
+    uri = 'spotify:user:'+req.session.username+':playlist:'+uri;
+    spotifyClient.newInstance(req.session.username,req.session.password).getTracksByPlayListURI(uri)
+    .on('tracksReady', function(tracks){
+      res.send({tracks: tracks});
+    })
+    .on('error', function(err){
+      res.send({error: err});
+    });
+  } else {
+    spotifyClient.newInstance(req.session.username,req.session.password).getTrackByTrackURI(uri)
+    .on('trackReady', function(track){
+      res.send(track);
+    })
+    .on('error', function(err){
+      res.send({error: err});
+    });
+  }
 });
 
 //Retreive album art for a given track
@@ -128,7 +165,7 @@ app.get('/:trackId.mp3', function(req, res){
   var trackURI = req.params.trackId;
 
   //Just pass the response here because we need to stream to it
-  spotifyClient.newInstance(req.session.username,req.session.password).playTrackByURI(trackURI, res); 
+  spotifyClient.newInstance(req.session.username,req.session.password).playTrackByURI(trackURI, res);
 });
 
 
