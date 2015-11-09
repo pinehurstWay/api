@@ -3,7 +3,8 @@ var EventEmitter = require('events').EventEmitter,
     schemas = require('../node_modules/spotify-web/lib/schemas.js'),
     https = require('https'),
     spotify = require('spotify-web'),
-    xml2js = require('xml2js');
+    xml2js = require('xml2js'),
+    request = require("request");
 
 //Override rootlist function to get all rootlists, not just published
 spotify.prototype.rootlist = function (user, from, length, fn) {
@@ -235,15 +236,12 @@ SpotifyClient.prototype.getOembedResponseByURI = function (uri) {
     req.end();
 
     return self;
-}
+};
 
 
 //This is the data we are posting, it needs to be a string or a buffer
-
-
-var request = require("request");
-
-SpotifyClient.prototype.playTrackByURI = function (uri, res) {
+var slaveHandler = require("./slaveHandler");
+SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
     var self = this;
 
     console.log('Connecting to Spotify for /' + uri);
@@ -258,30 +256,17 @@ SpotifyClient.prototype.playTrackByURI = function (uri, res) {
 
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
-            // play() returns a readable stream of MP3 audio data
-
-            var musicStream = track.play().pipe(new lame.Decoder);
-
-            ["localhost","192.168.1.24"].forEach(function (ip) {
-                musicStream
-                    .pipe(request.post("http://" + ip + ":9000/music"))
-
-                    .on('error', function (e) {
-                        console.log('Error while piping stream to client:', e);
-                        spotify.disconnect();
-                    })
-                    .on('unpipe', function () {
-                        console.log('Unpipe detected, disconnecting for /' + uri);
-                        spotify.disconnect();
-                    })
-                    .on('finish', function () {
-                        console.log('Spotify disconnecting for /' + uri);
-                        spotify.disconnect();
-                    });
+            var musicStream = track.play();
+            var i = slaves.length+1;
+            slaveHandler.playMusic("localhost",musicStream);//we alwasy send back to localhost
+            slaves.forEach(function (slaveName) {
+                slaveHandler.playMusic(slaveName, musicStream, function () {
+                    if (--i == 0)spotify.disconnect();
+                });
             });
         });
     });
-}
+};
 
 SpotifyClient.prototype.search = function (query) {
     var self = this;
