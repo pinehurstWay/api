@@ -5,8 +5,8 @@
 var request = require("request");
 
 var slaves = {
-    "walmartLabs": {
-        "ip": "192.168.0.12"
+    "local": {
+        "ip": "localhost"
     }
 };
 
