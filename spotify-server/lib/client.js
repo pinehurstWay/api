@@ -257,8 +257,9 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
             var musicStream = track.play();
-            var i = slaves.length+1;
-            slaveHandler.playMusic("localhost",musicStream);//we alwasy send back to localhost
+            //musicStream.pipe(res);
+            res.send({"success":true})
+            var i = slaves.length;
             slaves.forEach(function (slaveName) {
                 slaveHandler.playMusic(slaveName, musicStream, function () {
                     if (--i == 0)spotify.disconnect();
@@ -267,6 +268,34 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
         });
     });
 };
+
+SpotifyClient.prototype.setVolume = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.setVolume(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
+SpotifyClient.prototype.pause = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.pause(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
+SpotifyClient.prototype.resume = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.resume(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
 
 SpotifyClient.prototype.search = function (query) {
     var self = this;

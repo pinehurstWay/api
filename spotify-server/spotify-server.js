@@ -138,12 +138,25 @@ app.post('/playMusic', function (req, res) {
     spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
 });
 
-app.get('/volume/:volume', function (req, res) {
-    var volume = req.params.volume;
-    spotifyClient.volume.setVolume(volume);
-    res.reply({"success": true})
+app.post('/volume', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.setVolume(slaves, function () {
+        res.send({"success": true})
+    });
+});
 
+app.post('/pause', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.pause(slaves, function () {
+        res.send({"success": true})
+    });
+});
 
+app.post('/resume', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.resume(slaves, function () {
+        res.send({"success": true});
+    })
 });
 
 var server = http.createServer(app);
