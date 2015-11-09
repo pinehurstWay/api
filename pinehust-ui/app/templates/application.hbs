@@ -1,3 +1,16 @@
-<h2 id="title">Welcome to Ember</h2>
+<div id="wrapper">
 
-{{outlet}}
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        {{top-bar}}
+
+        {{left-menu}}
+    </nav>
+
+    <div id="page-wrapper">
+
+      {{outlet}}
+
+    </div>
+    <!-- /#page-wrapper -->
+</div>

@@ -6,6 +6,23 @@ module.exports = function(defaults) {
     // Add options here
   });
 
+
+  app.import('bower_components/bootstrap/dist/css/bootstrap.min.css');
+  app.import('bower_components/metisMenu/dist/metisMenu.min.css');
+  app.import('bower_components/startbootstrap-sb-admin-2/dist/css/timeline.css');
+  app.import('bower_components/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css');
+  app.import('bower_components/morrisjs/morris.css');
+  app.import('bower_components/font-awesome/css/font-awesome.min.css');
+
+
+  app.import('bower_components/jquery/dist/jquery.min.js');
+  app.import('bower_components/bootstrap/dist/js/bootstrap.min.js');
+  app.import('bower_components/metisMenu/dist/metisMenu.min.js');
+  app.import('bower_components/raphael/raphael-min.js');
+  app.import('bower_components/morrisjs/morris.min.js');
+  app.import('bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js');
+
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //
