@@ -162,7 +162,7 @@ app.post('/playMusic', function (req, res) {
     //var password = req.session.password;
     var username = "adrienvinches";
     var password = "zeswEG7F";
-    spotifyClient.newInstance(username, password).login()
+    spotifyClient.newInstance(username, password).login();
     spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
 });
 
