@@ -1,0 +1,21 @@
+<div class="col-lg-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-bell fa-fw"></i> Playlists
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="list-group">
+              {{#each listPlaylists as |playlist|}}
+                <a href="#" class="list-group-item">
+                    <i class="fa fa-tasks fa-fw"></i> {{playlist.name}}
+                    <span class="pull-right text-muted small"><em>{{playlist.length}} {{#if playlist.plurials}}musics{{else}}music{{/if}}</em>
+                    </span>
+                </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{list-musics}}

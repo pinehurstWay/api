@@ -7,7 +7,7 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('dashboard');
-  this.route('music');
+  this.route('playlists');
 });
 
 export default Router;
