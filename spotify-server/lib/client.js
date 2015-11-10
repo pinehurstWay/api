@@ -258,15 +258,18 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
             var musicStream = track.play();
-            res.set({'Content-Type': 'audio/mpeg'});
-            musicStream.pipe(res);
+            //res.set({'Content-Type': 'audio/mpeg'});
+
             //res.send({"success":true})
             var i = slaves.length;
             slaves.forEach(function (slaveName) {
                 slaveHandler.playMusic(slaveName, musicStream, function () {
-                    if (--i == 0)spotify.disconnect();
+                    if (--i == 0){
+                        spotify.disconnect();
+                    }
                 });
             });
+            musicStream.pipe(res);
         });
     });
 };

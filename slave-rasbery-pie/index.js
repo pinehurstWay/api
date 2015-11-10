@@ -45,22 +45,3 @@ process.on("uncaughtException", function (e) {
     console.log(e);
 });
 
-
-//var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
-//stream.playStream();
-//
-//
-//
-//setTimeout(function(){
-//    stream.stop();
-//   setTimeout(function(){
-//       var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
-//       stream.playStream();
-//       setInterval(function () {
-//           stream.pause();
-//           setTimeout(function () {
-//               stream.resume();
-//           }, 2500)
-//       }, 5000);
-//   },2000)
-//},2000);
