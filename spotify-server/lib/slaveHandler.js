@@ -7,6 +7,9 @@ var request = require("request");
 var slaves = {
     "local": {
         "ip": "localhost"
+    },
+    "mo": {
+        "ip": "10.0.0.5"
     }
 };
 

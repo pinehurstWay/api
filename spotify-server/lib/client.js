@@ -257,8 +257,9 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
             var musicStream = track.play();
-            //musicStream.pipe(res);
-            res.send({"success":true})
+            res.set({'Content-Type': 'audio/mpeg'});
+            musicStream.pipe(res);
+            //res.send({"success":true})
             var i = slaves.length;
             slaves.forEach(function (slaveName) {
                 slaveHandler.playMusic(slaveName, musicStream, function () {

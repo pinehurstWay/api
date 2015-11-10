@@ -20,7 +20,7 @@ module.exports = function(environment) {
       'style-src': "'self' 'unsafe-inline' 'unsafe-eval'",
       'img-src': "*",
       'media-src': "'self'",
-      'connect-src': "'self' 'http://localhost:3000' 'http://localhost:4200' 'http://localhost:3000/spotify-server/login/check:check'",
+      'connect-src': "'self' 'http://localhost:3000' 'http://localhost:4200' 'http://localhost:3000/spotify-server/login/check:check' 'http://localhost:3000/playMusic'",
       'object-src':"*"
     },
 
