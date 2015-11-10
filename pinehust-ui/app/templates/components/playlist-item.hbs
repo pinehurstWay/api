@@ -1,0 +1,5 @@
+  <a {{action "clickPlaylistItem" model}} class="{{if model.isActive 'active'}} list-group-item">
+    <i class="fa fa-tasks fa-fw"></i> {{model.name}}
+    <span class="pull-right text-muted small"><em>{{model.length}} {{#if model.plurials}}musics{{else}}music{{/if}}</em>
+    </span>
+</a>

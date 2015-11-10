@@ -24,24 +24,24 @@ $(document).ready(function(){
     url: '/spotify-server/login/check:check',
     beforeSend: function() {
       $('.modal').modal('show');
-    }            
-  }).done(function(data){  
+    }
+  }).done(function(data){
     if(data.success){
       $('#nav').show();
       $('.login-wrapper').hide();
-      getPlayLists();        
+      getPlayLists();
     }
     else{
       $('.login-wrapper').show();
       $('.modal').modal('hide');
-    }       
-  }); 
+    }
+  });
 
   //Event handlers for play/pause/nextTrack/track clicks
   $(document).click(function(e){
     //Handler for each Playlist link
     if(e.target.name==='playListLink'){
-      e.preventDefault();  
+      e.preventDefault();
       getPlayListTracks(e.target.id);
     }
     //Handler for playAudio button
@@ -68,15 +68,15 @@ $(document).ready(function(){
     //Handler for enqueueing a track from search
     else if(e.target.className==='enqueueTrack'){
       var id = e.target.id;
-      e.preventDefault();      
+      e.preventDefault();
       $.ajax({
         cache: false,
         dataType: "json",
         url: '/spotify-server/track/'+id,
         beforeSend: function() {
           $('.modal').modal('show');
-        }            
-      }).done(function(data){  
+        }
+      }).done(function(data){
         if(data.error){
           displayError(data.error);
           return;
@@ -98,7 +98,7 @@ $(document).ready(function(){
           tracks.tracks = new Array();
         }
 
-        customTrackQueue.push(data);        
+        customTrackQueue.push(data);
         tracks.tracks = customTrackQueue;
         tracks.tracks[customTrackQueue.length-1].trackURI = id;
 
@@ -107,10 +107,10 @@ $(document).ready(function(){
           loadTrack();
         }
 
-        $('.modal').modal('hide'); 
-      });        
-    }      
-  });  
+        $('.modal').modal('hide');
+      });
+    }
+  });
 
   getPlayLists = function() {
     //Get Playlists
@@ -125,47 +125,47 @@ $(document).ready(function(){
       if(data.error){
         displayError(data.error);
         return;
-      }      
+      }
 
       data.playlists.sort(sortByAttributeNameComparitor)
-      renderHandlebarsTemplate('playlists', data);  
-      playlists = data;        
+      renderHandlebarsTemplate('playlists', data);
+      playlists = data;
       $('.modal').modal('hide');
-    });      
-  }           
+    });
+  }
 
-  //Get Plastlist tracks        
+  //Get Plastlist tracks
   getPlayListTracks = function(uri){
     $.ajax({
       cache: false,
       dataType: "json",
-      url: '/spotify-server/playlist/'+uri.split(':')[4],
+      url: '/spotify-server/track?searchType=playlist&uri='+uri.split(':')[4],
       beforeSend: function() {
         $('.modal').modal('show');
-      }            
-    }).done(function(data){    
+      }
+    }).done(function(data){
       if(data.error){
         displayError(data.error);
         return;
-      }  
-              
+      }
+
       renderHandlebarsTemplate('tracks', data);
 
       //Load first track
       tracks = data;
       currentTrack = 0;
       loadTrack();
-    });          
+    });
   }
 
   renderAlbumArt = function(trackURI){
     $.ajax({
       cache: false,
       dataType: "json",
-      url: '/spotify-server/album-art/'+trackURI        
+      url: '/spotify-server/album-art/'+trackURI
     }).done(function(data){
       renderHandlebarsTemplate('currentAlbumArt', data.oembed, '#albumArt');
-    }); 
+    });
   }
 
   //Play next track
@@ -179,9 +179,9 @@ $(document).ready(function(){
 
     highlighTrackRow(tracks.tracks[currentTrack].trackURI);
     renderHandlebarsTemplate('currentTrack', tracks.tracks[currentTrack], '.currentTrack');
-    renderAlbumArt(tracks.tracks[currentTrack].trackURI);          
+    renderAlbumArt(tracks.tracks[currentTrack].trackURI);
     $('#audioPlayer').attr('src','/'+tracks.tracks[currentTrack].trackURI+'.mp3');
-    $('#audioPlayer').get(0).load();                    
+    $('#audioPlayer').get(0).load();
   }
 
   highlighTrackRow = function(trackURI){
@@ -198,10 +198,10 @@ $(document).ready(function(){
   //Render Handlebars Template
   renderHandlebarsTemplate = function(templateId, context, targetId){
     console.log('Rendering handlebars template with id',templateId,'and context',context);
-    var template = Handlebars.compile($('#'+templateId).html());    
-    var target = targetId || '.content';                
+    var template = Handlebars.compile($('#'+templateId).html());
+    var target = targetId || '.content';
     $(target).html(template(context));
-  }   
+  }
 
   //Sort function for playlists
   function sortByAttributeNameComparitor(a,b) {
@@ -209,9 +209,9 @@ $(document).ready(function(){
       return -1;
     if (a.attributes.name > b.attributes.name)
       return 1;
-    
+
     return 0;
-  }   
+  }
 
   function displayError(error){
     alert(error);
@@ -225,30 +225,30 @@ $(document).ready(function(){
       url: '/spotify-server/login/'+$('#username').val()+':'+$('#password').val(),
       beforeSend: function() {
         $('.modal').modal('show');
-      }            
-    }).done(function(data){  
+      }
+    }).done(function(data){
       if(data.success){
         $.cookie('username', $('#username').val());
         $.cookie('password', $('#password').val());
         $('#nav').show();
-        $('.login-wrapper').hide();        
-        getPlayLists();        
+        $('.login-wrapper').hide();
+        getPlayLists();
       }
       else{
         $('#loginMessage').show();
         $('.modal').modal('hide');
-      }       
-    }); 
+      }
+    });
   });
 
   //Handler for play
-  $('#audioPlayer').on('canplay', function(){             
+  $('#audioPlayer').on('canplay', function(){
     $('#audioPlayer').get(0).play();
-    $('.modal').modal('hide');       
-  });  
+    $('.modal').modal('hide');
+  });
 
   //Handler for audio player progress
-  $('#audioPlayer').on('timeupdate', function(){    
+  $('#audioPlayer').on('timeupdate', function(){
     var value = 0;
     var audioPlayer = $('#audioPlayer').get(0);
     var duration = tracks.tracks[currentTrack].duration/1000;
@@ -273,34 +273,34 @@ $(document).ready(function(){
     $('#current-time').text(timePlayed);
     $('#duration').text(played);
 
-  }); 
+  });
 
   //Handler for audio player track ended
   $('#audioPlayer').on('ended', function() {
     currentTrack++;
-    loadTrack();      
-  });   
+    loadTrack();
+  });
 
   //Handler for Playlist link
   $('#playlists-link').click(function(e){
     e.preventDefault();
     renderHandlebarsTemplate('playlists', playlists);
-  });    
+  });
   $('.glyphicon-th-list').mouseover(function(){
     $(this).tooltip('show');
-  });  
+  });
 
   //Handler for Now playing link
   $('#nowPlaying-link').click(function(e){
     e.preventDefault();
     renderHandlebarsTemplate('tracks', tracks);
     renderHandlebarsTemplate('currentTrack', tracks.tracks[currentTrack], '.currentTrack');
-    renderAlbumArt(tracks.tracks[currentTrack].trackURI);   
+    renderAlbumArt(tracks.tracks[currentTrack].trackURI);
     highlighTrackRow(tracks.tracks[currentTrack].trackURI);
   });
   $('.glyphicon-play').mouseover(function(){
     $(this).tooltip('show');
-  });   
+  });
 
   //Handler for Search link
   $('#search-link').click(function(e){
@@ -319,16 +319,16 @@ $(document).ready(function(){
         url: '/spotify-server/search/'+self.val(),
         beforeSend: function() {
           $('.modal').modal('show');
-        }            
-      }).done(function(data){  
+        }
+      }).done(function(data){
         if(data.error){
           displayError(data.error);
           return;
-        }  
-               
+        }
+
         renderHandlebarsTemplate('searchResults', data);
-        $('.modal').modal('hide'); 
-      });     
-    } 
-  });  
-});  
+        $('.modal').modal('hide');
+      });
+    }
+  });
+});

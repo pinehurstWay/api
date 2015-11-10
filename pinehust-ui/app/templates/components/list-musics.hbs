@@ -1,3 +1,9 @@
-hello
-
-{{yield}}
+<div class="col-lg-4">
+    <div class="panel-body">
+        <div class="list-group">
+          {{#each displayedTracksList as |track|}}
+            {{track-item clickTrack="clickTrack" model=track}}
+          {{/each}}
+        </div>
+    </div>
+</div>

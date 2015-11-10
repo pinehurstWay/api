@@ -1,4 +1,7 @@
-{{list-playlists listPlaylists=model}}
+{{list-playlists clickPlaylist="clickPlaylist" selectedPlaylist=model.selectedPlaylist listPlaylists=model.playlists}}
 
+{{list-musics clickTrack="clickTrack" selectedTrack=model.selectedTrack listTracks=model.listTracks}}
+
+{{track-view selectedTrack=model.selectedTrack}}
 
 {{outlet}}

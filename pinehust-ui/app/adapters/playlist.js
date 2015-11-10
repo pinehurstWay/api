@@ -25,7 +25,7 @@ export default ApplicationAdapter.extend({
     }
 
     payload.playlists.forEach(function (playlist) {
-      playlist.id = playlist.attributes.name;
+      playlist.id = playlist.playlistURI;
       playlist.name = playlist.attributes.name;
     });
     return payload;

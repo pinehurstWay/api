@@ -14,7 +14,7 @@ module.exports = function(environment) {
     },
 
     contentSecurityPolicy: {
-      'default-src': "'none'",
+      'default-src': "'none' 'https://developer.spotify.com/technologies/spotify-play-button/'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval'",
       'font-src': "'self' 'unsafe-inline' 'unsafe-eval'",
       'style-src': "'self' 'unsafe-inline' 'unsafe-eval'",
