@@ -9,6 +9,8 @@
     "ejs": "1.0.0",
     "express": "3.1.1",
     "express-session": "1.0.2",
+    "lame": "^1.2.3",
+    "pcm-volume": "^1.0.0",
     "request": "^2.65.0",
     "speaker": "^0.2.6",
     "spotify-web": "git://github.com/fuzeman/node-spotify-web.git#feature/ping-pong-fix",

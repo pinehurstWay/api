@@ -3,7 +3,8 @@ var EventEmitter = require('events').EventEmitter,
     schemas = require('../node_modules/spotify-web/lib/schemas.js'),
     https = require('https'),
     spotify = require('spotify-web'),
-    xml2js = require('xml2js');
+    xml2js = require('xml2js'),
+    request = require("request");
 
 //Override rootlist function to get all rootlists, not just published
 spotify.prototype.rootlist = function (user, from, length, fn) {
@@ -235,53 +236,66 @@ SpotifyClient.prototype.getOembedResponseByURI = function (uri) {
     req.end();
 
     return self;
-}
+};
 
 
 //This is the data we are posting, it needs to be a string or a buffer
-
-
-var request = require("request");
-SpotifyClient.prototype.playTrackByURI = function (uri, res) {
+var slaveHandler = require("./slaveHandler");
+SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
     var self = this;
 
     console.log('Connecting to Spotify for /' + uri);
     spotify.login(self.username, self.password, function (err, spotify) {
         if (err)
-            self.emit('error', err);
+            self.emit('error Spotify', err);
 
         // first get a "Track" instance from the track URI
         spotify.get(uri, function (err, track) {
             if (err)
-                self.emit('error', err);
+                self.emit('error Spotify', err);
 
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
-            // play() returns a readable stream of MP3 audio data
-
-
             var musicStream = track.play();
-
-            ["locahost", "192.168.0.1"].forEach(function (ip) {
-                musicStream
-                    .pipe(request.post("http://" + ip + ":8080/music"))
-
-                    .on('error', function (e) {
-                        console.log('Error while piping stream to client:', e);
-                        spotify.disconnect();
-                    })
-                    .on('unpipe', function () {
-                        console.log('Unpipe detected, disconnecting for /' + uri);
-                        spotify.disconnect();
-                    })
-                    .on('finish', function () {
-                        console.log('Spotify disconnecting for /' + uri);
-                        spotify.disconnect();
-                    });
+            //musicStream.pipe(res);
+            res.send({"success":true})
+            var i = slaves.length;
+            slaves.forEach(function (slaveName) {
+                slaveHandler.playMusic(slaveName, musicStream, function () {
+                    if (--i == 0)spotify.disconnect();
+                });
             });
         });
     });
-}
+};
+
+SpotifyClient.prototype.setVolume = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.setVolume(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
+SpotifyClient.prototype.pause = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.pause(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
+SpotifyClient.prototype.resume = function (slaves, next) {
+    var i = slaves.length;
+    slaves.forEach(function (slave) {
+        slaveHandler.resume(slave.name, slave.volume, function () {
+            if (--i == 0)next();
+        });
+    })
+};
+
 
 SpotifyClient.prototype.search = function (query) {
     var self = this;

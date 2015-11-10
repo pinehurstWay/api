@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express'),
     http = require('http');
 var app = express();
@@ -5,42 +6,61 @@ app.set('port', process.env.PORT || 9000);
 var server = http.createServer(app);
 
 
-var Speaker = require('speaker');
+var MusicPlayer = require("./MusicPlayerClass");
 
 
-var lame = require('lame');
-
-// create the Encoder instance
-var encoder = new lame.Encoder({
-    // input
-    channels: 2,        // 2 channels (left and right)
-    bitDepth: 16,       // 16-bit samples
-    sampleRate: 44100,  // 44,100 Hz sample rate
-
-    // output
-    bitRate: 128,
-    outSampleRate: 22050,
-    mode: lame.STEREO // STEREO (default), JOINTSTEREO, DUALCHANNEL or MONO
-});
-
-//var volume = require("pcm-volume");
-//var v = new volume();
-//setInterval(function() {
-//    v.setVolume(0.1);
-//    setTimeout(function(){
-//        v.setVolume(1)
-//    },2500)
-//}, 5000);
-
-
+var stream;
 app.all('/music', function (req, res) {
-    req.pipe(new lame.Decoder).pipe(new Speaker());
-    //res.reply({"hello":"wol"})
-
+    if (stream && stream.STATE == "PLAY")stream.stop();
+    stream = new MusicPlayer.Class(req);
+    stream.playStream()
 });
 
+
+app.get('/volume/:volume', function (req, res) {
+    console.log("changing volume");
+    stream.setVolume(req.params.volume);
+    res.send({"success": true});
+});
+
+
+app.get('/pause', function (req, res) {
+    console.log("pause");
+    stream.pause();
+    res.send({"success": true});
+});
+
+app.get('/resume', function (req, res) {
+    console.log("resuming");
+    stream.resume();
+    res.send({"success": true});
+});
 
 server.listen(app.get('port'), function () {
     console.log('Listening on port', app.get('port'));
 });
 
+
+process.on("uncaughtException", function (e) {
+    console.log(e);
+});
+
+
+//var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
+//stream.playStream();
+//
+//
+//
+//setTimeout(function(){
+//    stream.stop();
+//   setTimeout(function(){
+//       var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
+//       stream.playStream();
+//       setInterval(function () {
+//           stream.pause();
+//           setTimeout(function () {
+//               stream.resume();
+//           }, 2500)
+//       }, 5000);
+//   },2000)
+//},2000);

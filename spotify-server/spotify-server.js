@@ -1,8 +1,7 @@
 var express = require('express'),
     session = require('express-session');
-    cookieParser = require('cookie-parser');
+    cookieParser = require('cookie-parser');  
     http = require('http'),
-    cors = require('cors'),
     ejs = require('ejs'),
     path = require('path'),
     spotifyClient = require('./lib/client'),
@@ -15,11 +14,13 @@ var express = require('express'),
 process.on('uncaughtException', function (err) {
   console.error((err.stack+'').red.bold);
   console.error('Node trying not to exit...'.red.bold);
-});
+});     
 
 var app = express();
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
@@ -50,19 +51,11 @@ app.get('/spotify-server/logout', function(req,res){
   });
 });
 
-app.options('*', function (req, res) {
-  res.send({success: 'success'});
-})
-
 //Get login information
 app.get('/spotify-server/login/:usernameAndpassword', function(req, res){
   var up = req.params.usernameAndpassword;
-  console.log(up);
   var uname = up.split(':')[0];
   var pw = up.split(':')[1];
-  console.log(uname);
-  console.log(pw);
-  console.log('--------');
 
   if(req.session.loggedin && uname=='check'){
     res.send({success: 'success'});
@@ -161,15 +154,40 @@ app.get('/spotify-server/search/:query', function(req,res){
 });
 
 //Play a track
-app.get('/:trackId.mp3', function(req, res){
-  var trackURI = req.params.trackId;
-
-  //Just pass the response here because we need to stream to it
-  spotifyClient.newInstance(req.session.username,req.session.password).playTrackByURI(trackURI, res);
+app.post('/playMusic', function (req, res) {
+    var trackURI = req.body.trackId;
+    var slaves = req.body.slaves;
+    //Just pass the response here because we need to stream to it
+    //var username = req.session.username;
+    //var password = req.session.password;
+    var username = "adrienvinches";
+    var password = "zeswEG7F";
+    spotifyClient.newInstance(username, password).login();
+    spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
 });
 
+app.post('/volume', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.setVolume(slaves, function () {
+        res.send({"success": true})
+    });
+});
+
+app.post('/pause', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.pause(slaves, function () {
+        res.send({"success": true})
+    });
+});
+
+app.post('/resume', function (req, res) {
+    var slaves = req.body;
+    spotifyClient.resume(slaves, function () {
+        res.send({"success": true});
+    })
+});
 
 var server = http.createServer(app);
-server.listen(app.get('port'), function(){
-  console.log('Listening on port',app.get('port'));
+server.listen(app.get('port'), function () {
+    console.log('Listening on port', app.get('port'));
 });
