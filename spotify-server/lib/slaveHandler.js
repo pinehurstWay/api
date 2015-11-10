@@ -4,15 +4,7 @@
 
 var request = require("request");
 
-var slaves = {
-    //"local": {
-    //    "ip": "localhost"
-    //},
-    "mo": {
-        "ip": "192.168.31.155"
-    }
-};
-
+var slaves = require("../resources/slaves");
 
 exports.playMusic = function (slaveName, musicStream) {
 
