@@ -241,7 +241,7 @@ SpotifyClient.prototype.getOembedResponseByURI = function (uri) {
 
 //This is the data we are posting, it needs to be a string or a buffer
 var slaveHandler = require("./slaveHandler");
-var Lame = require("lame");
+//var Lame = require("lame");
 SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
     var self = this;
 
@@ -259,7 +259,7 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
 
             var musicStream = track.play();
             res.set({'Content-Type': 'audio/mpeg'});
-            musicStream.pipe(new Lame.Decoder).pipe(res);
+            musicStream.pipe(res);
             //res.send({"success":true})
             var i = slaves.length;
             slaves.forEach(function (slaveName) {

@@ -154,14 +154,14 @@ app.get('/spotify-server/search/:query', function(req,res){
 });
 
 //Play a track
-app.post('/playMusic', function (req, res) {
-    var trackURI = req.body.trackId;
-    var slaves = req.body.slaves;
+app.get('/playMusic/:trackId', function (req, res) {
+    var trackURI = req.params.trackId;
+    var slaves = JSON.parse(req.query.slaves);
     //Just pass the response here because we need to stream to it
-    //var username = req.session.username;
-    //var password = req.session.password;
-    var username = "adrienvinches";
-    var password = "zeswEG7F";
+    var username = req.session.username;
+    var password = req.session.password;
+    //var username = "adrienvinches";
+    //var password = "zeswEG7F";
     spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
 });
 
