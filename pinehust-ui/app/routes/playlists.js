@@ -21,9 +21,5 @@ export default Ember.Route.extend({
   setupController: function(controller, model, transition) {
     this._super(controller, model);
     controller.set('model', model);
-
-    Ember.run.scheduleOnce('afterRender', this, function () {
-      this.get('audio_player').setup($('#playerAudio').get(0));
-    });
   }
 });

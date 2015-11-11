@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  audio_player: Ember.inject.service(),
   slave: Ember.inject.service(),
   beforeModel: function (transition) {
     this._super(transition);
@@ -33,6 +34,10 @@ export default Ember.Route.extend({
     this._super(controller, model);
     controller.set('model', model);
     this.get('slave').setup(model.slaves);
+
+    Ember.run.scheduleOnce('afterRender', this, function () {
+      this.get('audio_player').setup($('#playerAudio').get(0));
+    });
   }
 
 });

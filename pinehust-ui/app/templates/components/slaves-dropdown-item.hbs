@@ -1,13 +1,25 @@
 <li>
     <a>
-        <div>
-            <strong>{{model.name}}</strong><i class="fa fa-{{model.statusFormated}} fa-fw"></i>
-            <span class="pull-right text-muted">
-                <em>{{model.ip}}</em>
-            </span>
-        </div>
-        <div>{{model.trackName}}</div><input id="{{model.name}}" type="range" min="0" max="1.2" step="0.1" value="{{model.volume}}" {{action "onVolumeUpdate" model}}/>
-        <div>{{input type="checkbox" name="isActive" checked=model.isActive}} Activated</div>
+      <div>
+        <strong>{{model.name}}</strong><i class="fa fa-{{model.statusFormated}} fa-fw"></i>
+        <span class="pull-right text-muted">
+          <em>{{model.ip}}</em>
+        </span>
+      </div>
+      <div>{{model.trackName}}</div><input id="{{model.name}}" type="range" min="0" max="1.2" step="0.1" value="{{model.volume}}" {{action "onVolumeUpdate" model}}/>
+      <button {{action 'mute' model bubbles=false}} type="button" class="btn btn-default btn-circle btn-sm">
+          <i class="fa fa-volume-off fa-fw"></i>
+      </button>
+      {{#if model.isActive}}
+        <button {{action 'toggleIsActive' model bubbles=false}} type="button" class="btn btn-default btn-circle btn-sm">
+          <i class="fa fa-check fa-fw"></i>
+        </button> Activated
+      {{else}}
+        <button {{action 'toggleIsActive' model bubbles=false}} type="button" class="btn btn-default btn-circle btn-sm">
+          <i class="fa fa-times fa-fw"></i>
+        </button> Not Activated
+      {{/if}}
+
     </a>
 </li>
 <li class="divider"></li>

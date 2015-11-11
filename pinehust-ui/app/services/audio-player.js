@@ -1,11 +1,13 @@
 import Ember from 'ember';
 
 export default Ember.Service.extend({
+  store: Ember.inject.service(),
   slave: Ember.inject.service(),
   player: null,
   queue: [],
   //callbacks: [],
-  isPaused: false,
+  isStopped: true,
+  isPaused:false,
   isPlaying: false,
   playerCurrentTime: '0:00',
   playingTrack: null,
@@ -40,6 +42,9 @@ export default Ember.Service.extend({
     var slaves = this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
     this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=' + JSON.stringify(slaves);
     this.get('player').load();
+    this.set('isPlaying', true);
+    this.set('isStopped', false);
+    this.set('isPaused', false);
   },
 
   trackEnded: function () {
@@ -64,6 +69,9 @@ export default Ember.Service.extend({
   playerEnded: function () {
     this.set('playerCurrentTime', '0:00');
     this.set('playerDurationPercent', 0);
+    this.set('isPlaying', false);
+    this.set('isStopped', true);
+    this.set('isPaused', false);
   },
 
   updateTime: function () {
@@ -99,6 +107,9 @@ export default Ember.Service.extend({
 
   play: function () {
     this.get('player').play();
+    this.set('isPlaying', true);
+    this.set('isStopped', false);
+    this.set('isPaused', false);
 
     if (!this.get('slaveListActiveName')) {
       return;
@@ -118,29 +129,12 @@ export default Ember.Service.extend({
     });
   },
 
-  updateSlaveVolume: function (slave, volume) {
-    slave.set('volume', volume);
-    var volumeObj = [{
-      name: slave.get('name'),
-      volume: volume.toString()
-    }];
-
-    Ember.$.ajax({
-      url: 'http://localhost:3000/volume',
-      type: 'POST',
-      crossDomain: true,
-      cache: false,
-      dataType: 'json',
-      data: {slave: volumeObj},
-      success: function (data) {
-      }.bind(this),
-      error: function (err) {
-      }
-    });
-  },
-
   pause: function () {
     this.get('player').pause();
+    this.set('isPlaying', false);
+    this.set('isStopped', false);
+    this.set('isPaused', true);
+
     if (!this.get('slaveListActiveName')) {
       return;
     }
@@ -198,9 +192,38 @@ export default Ember.Service.extend({
     }
   },
 
+  updateSlaveVolume: function (slave, volume) {
+    slave.set('volume', volume);
+    var volumeObj = [{
+      name: slave.get('name'),
+      volume: volume.toString()
+    }];
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/volume',
+      type: 'POST',
+      crossDomain: true,
+      cache: false,
+      dataType: 'json',
+      data: {slave: volumeObj},
+      success: function (data) {
+      }.bind(this),
+      error: function (err) {
+      }
+    });
+  },
+
+
   setup: function (element) {
     this.set('player', element);
     $('#playerAudio').on('timeupdate', this.updateTime.bind(this));
     $('#playerAudio').on('ended', this.trackEnded.bind(this));
+    var track = this.get('store').createRecord('track',{
+      artist: 'mon cul mes couilles',
+      album: 'ba t"es la toi',
+      name: 'yogogog ogogogo adsa',
+      id: 'ahahahah'
+    })
+    this.set('playingTrack', track);
   }
 });

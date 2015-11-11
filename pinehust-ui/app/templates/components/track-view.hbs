@@ -1,13 +1,43 @@
-<audio id="playerAudio" autoplay="autoplay"></audio>
-{{#if isComponentVisible}}
-  <img src="{{audio_player.playingTrack.thumbnail}}" alt="album-art" width=300 height=300 />
-  <div>{{audio_player.playerCurrentTime}}/{{audio_player.playingTrack.durationFormated}}</div>
-  <div class="progress progress-striped active">
-      <div class="progress-bar progress-bar-success" role="progressbar" style=" width: {{audio_player.playerDurationPercent}}%" aria-valuemin="0" aria-valuemax="100"></div>
+<div class="panel-body">
+    <div class="list-group" style="text-align:center;">
+
+        <audio id="playerAudio" autoplay="autoplay"></audio>
+          <div>
+            {{#if audio_player.playingTrack}}
+              <img src="{{audio_player.playingTrack.thumbnail}}" alt="album-art" width=250 height=250 />
+            {{else}}
+              <img src="/img/no-music.png" alt="album-art" width=250 height=250 />
+            {{/if}}
+          </div>
+          <div style="margin-top: 10px;">
+              <p><strong>Titre: </strong> {{audio_player.playingTrack.name}}</p>
+              <p><strong>Artist:</strong> {{audio_player.playingTrack.artist}}</p>
+              <p><strong>Album</strong> {{audio_player.playingTrack.album}}</p>
+              <p><strong>Time:</strong> {{audio_player.playerCurrentTime}}/{{audio_player.playingTrack.durationFormated}}</p>
+          </div>
+          <div class="progress progress-striped active">
+              <div class="progress-bar" role="progressbar" style="background-color: #383838; width: {{audio_player.playerDurationPercent}}%" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          {{#if audio_player.playingTrack}}
+            <button {{action 'previous'}} type="button" class="btn btn-default btn-circle btn-xl">
+              <i class="fa fa-backward"></i>
+            </button>
+
+            {{#if audio_player.isPaused}}
+              <button {{action 'play'}} type="button" class="btn btn-default btn-circle btn-xl">
+                <i class="fa fa-play"></i>
+              </button>
+            {{elseif audio_player.isPlaying}}
+              <button {{action 'pause'}} type="button" class="btn btn-default btn-circle btn-xl">
+                <i class="fa fa-pause"></i>
+              </button>
+            {{/if}}
+            <button {{action 'stop'}} type="button" class="btn btn-default btn-circle btn-xl">
+              <i class="fa fa-stop"></i>
+            </button>
+            <button {{action 'next'}} type="button" class="btn btn-default btn-circle btn-xl">
+              <i class="fa fa-forward"></i>
+            </button>
+          {{/if}}
+      </div>
   </div>
-  <button {{action 'previous'}}>Previous</button>
-  <button {{action 'play'}}>Play</button>
-  <button {{action 'pause'}}>Pause</button>
-  <button {{action 'stop'}}>Stop</button>
-  <button {{action 'next'}}>Next</button>
-{{/if}}
