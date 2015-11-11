@@ -39,5 +39,4 @@ export default Ember.Route.extend({
       this.get('audio_player').setup($('#playerAudio').get(0));
     });
   }
-
 });
