@@ -1,10 +1,15 @@
 <div id="wrapper">
 
-    <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        {{top-bar}}
+      {{top-bar-header}}
 
-        {{left-menu}}
+      <ul class="nav navbar-top-links navbar-right">
+        {{slaves-dropdown slavesList=model.slaves}}
+        {{!-- {{top-bar}} --}}
+      </ul>
+
+
+      {{left-menu}}
     </nav>
 
     <div id="page-wrapper">
@@ -12,5 +17,4 @@
       {{outlet}}
 
     </div>
-    <!-- /#page-wrapper -->
 </div>

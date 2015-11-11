@@ -33,7 +33,7 @@ export default Ember.Service.extend({
   },
 
   loadTrack: function (track) {
-    this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=["mactest"]';
+    this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=["ptipy"]';
     this.get('player').load();
   },
 

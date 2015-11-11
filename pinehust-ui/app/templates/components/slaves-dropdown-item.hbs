@@ -1,0 +1,12 @@
+<li>
+    <a {{action "toggleCheckbox" model}}>
+        <div>
+            <strong>{{model.name}}</strong>
+            <span class="pull-right text-muted">
+                <em>{{model.ip}}</em>
+            </span>
+        </div>
+        <div>{{input type="checkbox" name="isActive" checked=model.isActive}}</div>
+    </a>
+</li>
+<li class="divider"></li>

@@ -21,5 +21,16 @@ export default Ember.Route.extend({
         console.log('connection to spotify error');
       }
     });
+  },
+  model: function () {
+    var slaves = this.get('store').findAll('slave');
+    return Ember.RSVP.hash({
+      slaves: slaves
+    });
+  },
+  setupController: function(controller, model, transition) {
+    this._super(controller, model);
+    controller.set('model', model);
   }
+
 });
