@@ -56,8 +56,10 @@ SpotifyClient.prototype.newInstance = function (username, password) {
     return new SpotifyClient(username, password);
 };
 
-SpotifyClient.prototype.login = function () {
+SpotifyClient.prototype.login = function (username,password) {
     var self = this;
+    if(!self.username)self.username=username;
+    if(!self.password)self.password=password;
     spotify.login(self.username, self.password, function (err, spotify) {
         if (err) {
             self.emit('error', 'error');
@@ -258,7 +260,7 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             console.log('Streaming: %s - %s', track.artist[0].name, track.name);
 
             var musicStream = track.play();
-            //res.set({'Content-Type': 'audio/mpeg'});
+            //
 
             //res.send({"success":true})
             var i = slaves.length;
@@ -269,7 +271,9 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
                     }
                 });
             });
-            musicStream.pipe(res);
+            res.set({'Content-Type': 'audio/mpeg'});
+            res.send("true")
+            //musicStream.pipe(res);
         });
     });
 };

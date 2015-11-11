@@ -19,20 +19,20 @@ app.all('/music', function (req, res) {
 
 app.get('/volume/:volume', function (req, res) {
     console.log("changing volume");
-    stream.setVolume(req.params.volume);
+    v.setVolume(req.params.volume);
     res.send({"success": true});
 });
 
 
 app.get('/pause', function (req, res) {
     console.log("pause");
-    stream.pause();
+    inputStream.pause();
     res.send({"success": true});
 });
 
 app.get('/resume', function (req, res) {
     console.log("resuming");
-    stream.resume();
+    inputStream.resume();
     res.send({"success": true});
 });
 
@@ -45,3 +45,22 @@ process.on("uncaughtException", function (e) {
     console.log(e);
 });
 
+
+//var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
+//stream.playStream();
+//
+//
+//
+//setTimeout(function(){
+//    stream.stop();
+//   setTimeout(function(){
+//       var stream = new streamReader(fs.createReadStream(__dirname + "/littlebird.mp3"));
+//       stream.playStream();
+//       setInterval(function () {
+//           stream.pause();
+//           setTimeout(function () {
+//               stream.resume();
+//           }, 2500)
+//       }, 5000);
+//   },2000)
+//},2000);

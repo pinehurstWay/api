@@ -21,12 +21,15 @@ class MusicPlayer {
         this.stream = null;
     }
 
-    playStream() {
+    playStream(next) {
         this.STATE = "PLAY";
         this.stream = this.source.pipe(this.throttle).pipe(new Lame.Decoder)
             .on("format", (format)=> {
                 this.stream.pipe(this.volume).pipe(this.speaker);
             });
+        this.stream.on('end',function(){
+            next()
+        })
     }
 
     pause() {

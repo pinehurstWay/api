@@ -189,7 +189,19 @@ app.get('/slaves', function (req, res) {
 });
 
 
+app.get('/playMusicTest/:trackId', function (req, res) {
+    var trackURI = req.params.trackId;
+    var slaves = JSON.parse(req.query.slaves);
+    var username = "adrienvinches";
+    var password = "zeswEG7F";
+    spotifyClient.login(username,password);
+    spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
+});
+
+
 var server = http.createServer(app);
 server.listen(app.get('port'), function () {
     console.log('Listening on port', app.get('port'));
 });
+
+
