@@ -1,9 +1,9 @@
 <audio id="playerAudio" autoplay="autoplay"></audio>
 {{#if isComponentVisible}}
-  <img src="{{playingTrack.thumbnail}}" alt="album-art" width=300 height=300 />
-  <div>{{playerCurrentTime}}/{{playingTrack.durationFormated}}</div>
+  <img src="{{audio_player.playingTrack.thumbnail}}" alt="album-art" width=300 height=300 />
+  <div>{{audio_player.playerCurrentTime}}/{{audio_player.playingTrack.durationFormated}}</div>
   <div class="progress progress-striped active">
-      <div class="progress-bar progress-bar-success" role="progressbar" style=" width: {{playerDurationPercent}}%" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="progress-bar progress-bar-success" role="progressbar" style=" width: {{audio_player.playerDurationPercent}}%" aria-valuemin="0" aria-valuemax="100"></div>
   </div>
   <button {{action 'previous'}}>Previous</button>
   <button {{action 'play'}}>Play</button>
