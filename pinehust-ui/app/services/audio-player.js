@@ -118,6 +118,27 @@ export default Ember.Service.extend({
     });
   },
 
+  updateSlaveVolume: function (slave, volume) {
+    slave.set('volume', volume);
+    var volumeObj = [{
+      name: slave.get('name'),
+      volume: volume.toString()
+    }];
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/volume',
+      type: 'POST',
+      crossDomain: true,
+      cache: false,
+      dataType: 'json',
+      data: {slave: volumeObj},
+      success: function (data) {
+      }.bind(this),
+      error: function (err) {
+      }
+    });
+  },
+
   pause: function () {
     this.get('player').pause();
     if (!this.get('slaveListActiveName')) {
@@ -141,6 +162,24 @@ export default Ember.Service.extend({
   stop: function () {
     this.stopPlayer();
     this.set('playingTrack', null);
+
+    this.get('player').pause();
+    if (!this.get('slaveListActiveName')) {
+      return;
+    }
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/stop',
+      type: 'POST',
+      crossDomain: true,
+      cache: false,
+      dataType: 'json',
+      data: {slave: this.get('slaveListActiveName')},
+      success: function (data) {
+      }.bind(this),
+      error: function (err) {
+      }
+    });
   },
 
   previous: function () {

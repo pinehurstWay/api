@@ -7,16 +7,19 @@ export default DS.Model.extend({
   trackName: DS.attr('string'),
   status: DS.attr('string'),
   volume: DS.attr("number",{defaultValue:0.5}),
+  volumePercent: function () {
+    return this.get('volume') * 100;
+  }.property('volume'),
   statusFormated: function () {
     switch (this.get("status")) {
       case "PLAYING":
-        return "playing";
+        return "play";
         break;
       case "STOPPED":
-        return "stopped";
+        return "stop";
         break;
       case "PAUSED":
-        return "paused";
+        return "pause";
         break;
       default:
         return this.get("status");

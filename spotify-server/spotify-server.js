@@ -166,7 +166,7 @@ app.get('/playMusic/:trackId', function (req, res) {
 });
 
 app.post('/volume', function (req, res) {
-    var slaves = req.body;
+    var slaves = req.body.slave;
     spotifyClient.setVolume(slaves, function () {
         res.send({"success": true})
     });
