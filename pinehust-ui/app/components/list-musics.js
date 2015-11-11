@@ -1,15 +1,15 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  audio_player: Ember.inject.service(),
   listTracks: [],
-  selectedTrack: null,
 
   displayedTracksList: function () {
     this.get('listTracks').forEach(function (track) {
-        track.set('isActive', track.id === this.get('selectedTrack'));
+        track.set('isActive', track.id === this.get('audio_player.playingTrack.id'));
     }.bind(this));
     return this.get('listTracks');
-  }.property('listTracks.@each,selectedTrack'),
+  }.property('listTracks.@each,audio_player.playingTrack'),
 
 
   init: function () {
