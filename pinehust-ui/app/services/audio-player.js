@@ -193,11 +193,12 @@ export default Ember.Service.extend({
   },
 
   updateSlaveVolume: function (slave, volume) {
-    slave.set('volume', volume);
     var volumeObj = [{
       name: slave.get('name'),
       volume: volume.toString()
     }];
+
+    this.get('slave').updateSlaveVolume(slave, volume);
 
     Ember.$.ajax({
       url: 'http://localhost:3000/volume',
@@ -213,11 +214,12 @@ export default Ember.Service.extend({
     });
   },
 
-
-  setup: function (element) {
+  setup: function (element, preferences) {
     this.set('player', element);
     $('#playerAudio').on('timeupdate', this.updateTime.bind(this));
     $('#playerAudio').on('ended', this.trackEnded.bind(this));
+
+
     var track = this.get('store').createRecord('track',{
       artist: 'mon cul mes couilles',
       album: 'ba t"es la toi',

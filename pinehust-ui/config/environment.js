@@ -4,6 +4,7 @@ module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'pinehust-ui',
     environment: environment,
+    local_storage_schema_version: '0.1',
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {

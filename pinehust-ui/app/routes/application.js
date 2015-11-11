@@ -8,7 +8,7 @@ export default Ember.Route.extend({
 
     document.cookie = 'username=AdrienVinches;password=zeswEG7F;';
 
-    return Ember.$.ajax({
+    /*return Ember.$.ajax({
       url: 'http://localhost:3000/spotify-server/login/adrienvinches:zeswEG7F',
       crossDomain: true,
       cache: false,
@@ -22,18 +22,18 @@ export default Ember.Route.extend({
       error: function (err) {
         console.log('connection to spotify error');
       }
-    });
+    });*/
   },
   model: function () {
-    var slaves = this.get('store').findAll('slave');
     return Ember.RSVP.hash({
-      slaves: slaves
+      slaves: this.get('store').findAll('slave'),
+      slavesPreferences: this.get('store').findAll('slave_preference')
     });
   },
   setupController: function (controller, model, transition) {
     this._super(controller, model);
     controller.set('model', model);
-    this.get('slave').setup(model.slaves);
+    this.get('slave').setup(model.slaves, model.slavesPreferences);
 
     Ember.run.scheduleOnce('afterRender', this, function () {
       this.get('audio_player').setup($('#playerAudio').get(0));

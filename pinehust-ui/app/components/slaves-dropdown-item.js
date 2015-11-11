@@ -2,13 +2,14 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   audio_player: Ember.inject.service(),
+  slave: Ember.inject.service(),
   tagName: '',
   init: function () {
     this._super();
   },
   actions: {
     toggleIsActive: function (slave) {
-      slave.set('isActive', !slave.get('isActive'));
+      this.get('slave').toggleIsActive(slave);
     },
 
     mute: function (slave) {
