@@ -13,7 +13,7 @@ var BIT_RATE = 160000;
 
 class MusicPlayer {
     constructor(source) {
-        this.STATE = "STOP";
+        this.STATE = "STOPPED";
         this.source = source;
         this.speaker = new Speaker();
         this.throttle = new Throttle(BIT_RATE / 8);
@@ -22,7 +22,7 @@ class MusicPlayer {
     }
 
     playStream(next) {
-        this.STATE = "PLAY";
+        this.STATE = "PLAYING";
         this.stream = this.source.pipe(this.throttle).pipe(new Lame.Decoder)
             .on("format", (format)=> {
                 this.stream.pipe(this.volume).pipe(this.speaker);
@@ -33,7 +33,7 @@ class MusicPlayer {
     }
 
     pause() {
-        if (this.STATE == "PLAY") {
+        if (this.STATE == "PLAYING") {
             this.stream.unpipe();
             this.speaker.end();
             this.speaker = new Speaker();
@@ -44,16 +44,16 @@ class MusicPlayer {
     resume() {
         if (this.STATE == "PAUSED") {
             this.stream.pipe(this.volume).pipe(this.speaker);
-            this.STATE = "PLAY";
+            this.STATE = "PLAYING";
         }
     }
 
     stop() {
-        if (this.STATE !== "STOP") {
+        if (this.STATE !== "STOPPED") {
             this.speaker.end();
             this.stream.unpipe();
             this.stream = null;
-            this.STATE = "STOP";
+            this.STATE = "STOPPED";
         }
     }
 

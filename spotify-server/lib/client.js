@@ -267,7 +267,7 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             //res.send({"success":true})
             var i = slaves.length;
             slaves.forEach(function (slaveName) {
-                slaveHandler.playMusic(slaveName, musicStream, function () {
+                slaveHandler.playMusic(slaveName, musicStream,track.name, function () {
                     if (--i == 0) {
                         spotify.disconnect();
                     }

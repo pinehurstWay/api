@@ -13,7 +13,10 @@ var stream;
 app.all('/music', function (req, res) {
     if (stream && stream.STATE == "PLAY")stream.stop();
     stream = new MusicPlayer.Class(req);
-    stream.playStream()
+    stream.playStream(function(){
+        res.set({'MusicOver': 'true'});
+        res.send()
+    })
 });
 
 

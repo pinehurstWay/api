@@ -5,8 +5,10 @@ http = require('http'),
     ejs = require('ejs'),
     path = require('path'),
     spotifyClient = require('./lib/client'),
-    color = require('tinycolor'),
-    slaves = require("./resources/slaves");
+    color = require('tinycolor');
+
+//make it global
+slaves = require("./resources/slaves");
 
 //Don't stop this server if an exception goes uncaught
 process.on('uncaughtException', function (err) {
@@ -194,7 +196,7 @@ app.get('/playMusicTest/:trackId', function (req, res) {
     var slaves = JSON.parse(req.query.slaves);
     var username = "adrienvinches";
     var password = "zeswEG7F";
-    spotifyClient.login(username,password);
+    spotifyClient.login(username, password);
     spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
 });
 
