@@ -22,12 +22,11 @@
             <button {{action 'previous'}} type="button" class="btn btn-default btn-circle btn-xl">
               <i class="fa fa-backward"></i>
             </button>
-
             {{#if audio_player.isPaused}}
               <button {{action 'play'}} type="button" class="btn btn-default btn-circle btn-xl">
                 <i class="fa fa-play"></i>
               </button>
-            {{elseif audio_player.isPlaying}}
+            {{else if audio_player.isPlaying}}
               <button {{action 'pause'}} type="button" class="btn btn-default btn-circle btn-xl">
                 <i class="fa fa-pause"></i>
               </button>

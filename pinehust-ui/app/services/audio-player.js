@@ -220,12 +220,13 @@ export default Ember.Service.extend({
     $('#playerAudio').on('ended', this.trackEnded.bind(this));
 
 
-    // var track = this.get('store').createRecord('track',{
-    //   artist: 'mon cul mes couilles',
-    //   album: 'ba t"es la toi',
-    //   name: 'yogogog ogogogo adsa',
-    //   id: 'ahahahah'
-    // })
-    // this.set('playingTrack', track);
+    var track = this.get('store').createRecord('track',{
+      artist: '---',
+      album: '---',
+      name: '---',
+      duration: 0,
+      id: 'test'
+    })
+    this.set('playingTrack', track);
   }
 });

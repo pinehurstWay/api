@@ -21,7 +21,7 @@
       <button type="button" class="btn btn-default btn-circle"><i class="fa fa-backward fa-fw" {{action 'previous'}}></i></button>
       {{#if audio_player.isPaused}}
         <button type="button" class="btn btn-default btn-circle"><i class="fa fa-play fa-fw" {{action 'play'}}></i></button>
-      {{elseif audio_player.isPlaying}}
+      {{else if audio_player.isPlaying}}
         <button type="button" class="btn btn-default btn-circle"><i class="fa fa-pause fa-fw" {{action 'pause'}}></i></button>
       {{else}}
         <button type="button" class="btn btn-default btn-circle"><i class="fa fa-stop fa-fw" {{action 'stop'}}></i></button>
