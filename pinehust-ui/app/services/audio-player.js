@@ -198,7 +198,7 @@ export default Ember.Service.extend({
       volume: volume.toString()
     }];
 
-    this.get('slave').updateSlaveVolume(slave, volume);
+    this.get('slave').updateSlaveVolume(slave, volume.toString());
 
     Ember.$.ajax({
       url: 'http://localhost:3000/volume',
@@ -220,12 +220,12 @@ export default Ember.Service.extend({
     $('#playerAudio').on('ended', this.trackEnded.bind(this));
 
 
-    var track = this.get('store').createRecord('track',{
-      artist: 'mon cul mes couilles',
-      album: 'ba t"es la toi',
-      name: 'yogogog ogogogo adsa',
-      id: 'ahahahah'
-    })
-    this.set('playingTrack', track);
+    // var track = this.get('store').createRecord('track',{
+    //   artist: 'mon cul mes couilles',
+    //   album: 'ba t"es la toi',
+    //   name: 'yogogog ogogogo adsa',
+    //   id: 'ahahahah'
+    // })
+    // this.set('playingTrack', track);
   }
 });

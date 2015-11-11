@@ -10,7 +10,7 @@ export default Ember.Service.extend({
   },
 
   updateSlaveVolume: function (slave, volume) {
-    slave.set('volume', volume);
+    slave.set('volume', volume.toString());
     var preference = this.get('preferenceList').findBy('id', slave.get('id'));
 
     this.savePreference(slave, preference);

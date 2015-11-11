@@ -3,7 +3,7 @@ import DS from 'ember-data';
 export default DS.Model.extend({
   name: DS.attr('string'),
   ip: DS.attr('string'),
-  isActive: DS.attr('string'),
+  isActive: DS.attr('boolean'),
   trackName: DS.attr('string'),
   status: DS.attr('string'),
   volume: DS.attr("number",{defaultValue:0.5}),
