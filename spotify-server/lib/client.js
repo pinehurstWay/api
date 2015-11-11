@@ -56,10 +56,10 @@ SpotifyClient.prototype.newInstance = function (username, password) {
     return new SpotifyClient(username, password);
 };
 
-SpotifyClient.prototype.login = function (username,password) {
+SpotifyClient.prototype.login = function (username, password) {
     var self = this;
-    if(!self.username)self.username=username;
-    if(!self.password)self.password=password;
+    if (!self.username)self.username = username;
+    if (!self.password)self.password = password;
     spotify.login(self.username, self.password, function (err, spotify) {
         if (err) {
             self.emit('error', 'error');
@@ -72,11 +72,13 @@ SpotifyClient.prototype.login = function (username,password) {
     return self;
 };
 
-SpotifyClient.prototype.getPlayLists = function () {
+SpotifyClient.prototype.getPlayLists = function (username, password) {
     var self = this;
     var spotifyLib = spotify;
 
     //Login
+    if (!self.username)self.username = username;
+    if (!self.password)self.password = password;
     console.log('Connecting to Spotify for playlists');
     spotify.login(self.username, self.password, function (err, spotify) {
         if (err)
@@ -266,7 +268,7 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             var i = slaves.length;
             slaves.forEach(function (slaveName) {
                 slaveHandler.playMusic(slaveName, musicStream, function () {
-                    if (--i == 0){
+                    if (--i == 0) {
                         spotify.disconnect();
                     }
                 });
