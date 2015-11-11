@@ -1,14 +1,14 @@
 import ApplicationAdapter from './application';
 
 export default ApplicationAdapter.extend({
-  buildURL: function(modelName, id, snapshot) {
+  buildURL: function (modelName, id, snapshot) {
     this._super(modelName, id, snapshot);
     var url = 'slaves';
 
     return url;
   },
 
-  handleResponse: function(status, header, payload) {
+  handleResponse: function (status, header, payload) {
     this._super(status, header, payload);
 
     if (!payload) {
@@ -22,7 +22,9 @@ export default ApplicationAdapter.extend({
       result.slaves.push({
         "id": payload[slave].ip,
         "name": slave,
-        "ip": payload[slave].ip
+        "ip": payload[slave].ip,
+        "trackName": payload[slave].trackName,
+        "status": payload[slave].status
       });
     }
     return result;

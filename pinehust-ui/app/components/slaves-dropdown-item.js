@@ -6,8 +6,5 @@ export default Ember.Component.extend({
     this._super();
   },
   actions: {
-    toggleCheckbox: function (slave) {
-      slave.set('isActive', !slave.get('isActive'));
-    }
   }
 });

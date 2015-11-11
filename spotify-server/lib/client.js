@@ -52,8 +52,14 @@ SpotifyClient.prototype = Object.create(EventEmitter.prototype, {
     }
 });
 
+var spotifyClientVar = null;
 SpotifyClient.prototype.newInstance = function (username, password) {
-    return new SpotifyClient(username, password);
+    if(spotifyClientVar)return spotifyClientVar
+    else{
+        spotifyClientVar = new SpotifyClient(username, password);
+        return spotifyClientVar;
+    }
+
 };
 
 SpotifyClient.prototype.login = function (username, password) {
@@ -267,15 +273,55 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             //res.send({"success":true})
             var i = slaves.length;
             slaves.forEach(function (slaveName) {
-                slaveHandler.playMusic(slaveName, musicStream,track.name, function () {
+                slaveHandler.playMusic(slaveName, musicStream, track.name, function () {
                     if (--i == 0) {
                         spotify.disconnect();
                     }
                 });
             });
-            res.set({'Content-Type': 'audio/mpeg'});
-            res.send("true")
+
+            musicStream.pipe(res);
+
+            musicStream
+                .on("end", function () {
+                    console.log("finish streaming music")
+                }).on("finish", function () {
+                console.log("finish2 streaming music")
+            })
+        });
+    });
+};
+
+SpotifyClient.prototype.playTrackByURITest = function (uri, slaves, res) {
+    var self = this;
+
+    console.log('Connecting to Spotify for /' + uri);
+    spotify.login(self.username, self.password, function (err, spotify) {
+        if (err)
+            self.emit('error Spotify', err);
+
+        // first get a "Track" instance from the track URI
+        spotify.get(uri, function (err, track) {
+            if (err)
+                self.emit('error Spotify', err);
+
+            console.log('Streaming: %s - %s', track.artist[0].name, track.name);
+
+            var musicStream = track.play();
+            //
+
+            //res.send({"success":true})
+            var i = slaves.length;
+            slaves.forEach(function (slaveName) {
+                slaveHandler.playMusic(slaveName, musicStream, track.name, function () {
+                    if (--i == 0) {
+                        spotify.disconnect();
+                    }
+                });
+            });
+
             //musicStream.pipe(res);
+            res.send({"success": true})
         });
     });
 };
@@ -292,7 +338,7 @@ SpotifyClient.prototype.setVolume = function (slaves, next) {
 SpotifyClient.prototype.pause = function (slaves, next) {
     var i = slaves.length;
     slaves.forEach(function (slave) {
-        slaveHandler.pause(slave.name, slave.volume, function () {
+        slaveHandler.pause(slave, function () {
             if (--i == 0)next();
         });
     })
@@ -301,7 +347,7 @@ SpotifyClient.prototype.pause = function (slaves, next) {
 SpotifyClient.prototype.resume = function (slaves, next) {
     var i = slaves.length;
     slaves.forEach(function (slave) {
-        slaveHandler.resume(slave.name, slave.volume, function () {
+        slaveHandler.resume(slave, function () {
             if (--i == 0)next();
         });
     })

@@ -1,9 +1,10 @@
 import Ember from 'ember';
 
 export default Ember.Service.extend({
+  slave: Ember.inject.service(),
   player: null,
   queue: [],
-  callbacks: [],
+  //callbacks: [],
   isPaused: false,
   isPlaying: false,
   playerCurrentTime: '0:00',
@@ -13,6 +14,9 @@ export default Ember.Service.extend({
   musicIndex: function () {
     return this.get('queue').indexOf(this.get('playingTrack'));
   }.property('queue,playingTrack'),
+  slaveListActiveName: function () {
+    return this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
+  }.property('slave.slaveList.@each.isActive'),
 
 
   // on: function(event, callback, context) {
@@ -33,7 +37,8 @@ export default Ember.Service.extend({
   },
 
   loadTrack: function (track) {
-    this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=["ptipy"]';
+    var slaves = this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
+    this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=' + JSON.stringify(slaves);
     this.get('player').load();
   },
 
@@ -69,7 +74,7 @@ export default Ember.Service.extend({
     var sec = Math.floor(this.get('player').currentTime % 60);
     var min = Math.floor(this.get('player').currentTime / 60);
     var trackDurationSec = (this.get('playingTrack').get('duration') / 1000);
-    var timePlayed =  sec > 9 ? min + ':' + sec : min + ':0' + sec;
+    var timePlayed = sec > 9 ? min + ':' + sec : min + ':0' + sec;
     var durationPercent = (this.get('player').currentTime / trackDurationSec) * 100;
     this.set('playerCurrentTime', timePlayed);
     this.set('playerDurationPercent', durationPercent);
@@ -82,22 +87,55 @@ export default Ember.Service.extend({
       cache: false,
       dataType: 'json',
       xhrFields: {
-          withCredentials: true
+        withCredentials: true
       },
-      success: function(data) {
+      success: function (data) {
         track.set('thumbnail', data.oembed.thumbnail_url);
       },
-      error: function(err) {
+      error: function (err) {
       }
     });
   },
 
   play: function () {
     this.get('player').play();
+
+    if (!this.get('slaveListActiveName')) {
+      return;
+    }
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/resume',
+      type: 'POST',
+      crossDomain: true,
+      cache: false,
+      dataType: 'json',
+      data: {slave: this.get('slaveListActiveName')},
+      success: function (data) {
+      }.bind(this),
+      error: function (err) {
+      }
+    });
   },
 
   pause: function () {
     this.get('player').pause();
+    if (!this.get('slaveListActiveName')) {
+      return;
+    }
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/pause',
+      type: 'POST',
+      crossDomain: true,
+      cache: false,
+      dataType: 'json',
+      data: {slave: this.get('slaveListActiveName')},
+      success: function (data) {
+      }.bind(this),
+      error: function (err) {
+      }
+    });
   },
 
   stop: function () {

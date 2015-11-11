@@ -16,16 +16,22 @@ exports.playMusic = function (slaveName, musicStream, musicName, next) {
     musicStream
         .pipe(pipeDestination)
         .on('error', function (e) {
+            slave.status = "STOPPED";
+            delete slave.trackName;
             console.log('Error while piping stream to client:', e);
         })
         .on('unpipe', function () {
+            slave.status = "STOPPED";
+            delete slave.trackName;
             console.log('Unpipe detected, disconnecting for /' + slaveName);
         })
         .on('finish', function () {
+            slave.status = "STOPPED";
+            delete slave.trackName;
             console.log('Spotify disconnecting for /' + uri);
         })
         .on("end", function () {
-            slaves[slaveName].status = "STOPPED";
+            slave.status = "STOPPED";
             delete slave.trackName;
             next();
         });
@@ -39,15 +45,17 @@ exports.setVolume = function (slaveName, volume, next) {
     });
 };
 
-exports.pause = function (slaveName, volume, next) {
+exports.pause = function (slaveName, next) {
     var ip = slaves[slaveName].ip;
+    slaves[slaveName].status = "PAUSED";
     request.get("http://" + ip + ":9000/pause", function () {
         next();
     });
 };
 
-exports.resume = function (slaveName, volume, next) {
+exports.resume = function (slaveName, next) {
     var ip = slaves[slaveName].ip;
+    slaves[slaveName].status = "PLAYING";
     request.get("http://" + ip + ":9000/resume", function () {
         next();
     });

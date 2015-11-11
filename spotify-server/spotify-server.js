@@ -173,14 +173,14 @@ app.post('/volume', function (req, res) {
 });
 
 app.post('/pause', function (req, res) {
-    var slaves = req.body;
+    var slaves = req.body.slave;
     spotifyClient.pause(slaves, function () {
         res.send({"success": true})
     });
 });
 
 app.post('/resume', function (req, res) {
-    var slaves = req.body;
+    var slaves = req.body.slave;
     spotifyClient.resume(slaves, function () {
         res.send({"success": true});
     })
@@ -197,7 +197,7 @@ app.get('/playMusicTest/:trackId', function (req, res) {
     var username = "adrienvinches";
     var password = "zeswEG7F";
     spotifyClient.login(username, password);
-    spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
+    spotifyClient.newInstance(username, password).playTrackByURITest(trackURI, slaves, res);
 });
 
 

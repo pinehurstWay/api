@@ -1,11 +1,13 @@
 <li>
-    <a {{action "toggleCheckbox" model}}>
+    <a>
         <div>
             <strong>{{model.name}}</strong>
             <span class="pull-right text-muted">
                 <em>{{model.ip}}</em>
             </span>
         </div>
+        <div>{{model.trackName}}</div><input id="slider1" type="range" min="0" max="1.2" step="0.1" oninput="{{model.volume}}=this.value" />{{model.volume}}
+        <div>{{model.statusFormated}}</div>
         <div>{{input type="checkbox" name="isActive" checked=model.isActive}}</div>
     </a>
 </li>

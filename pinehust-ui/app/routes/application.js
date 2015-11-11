@@ -1,23 +1,24 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  beforeModel: function(transition) {
+  slave: Ember.inject.service(),
+  beforeModel: function (transition) {
     this._super(transition);
 
     document.cookie = 'username=AdrienVinches;password=zeswEG7F;';
 
-    Ember.$.ajax({
+    return Ember.$.ajax({
       url: 'http://localhost:3000/spotify-server/login/adrienvinches:zeswEG7F',
       crossDomain: true,
       cache: false,
       dataType: 'json',
       xhrFields: {
-          withCredentials: true
+        withCredentials: true
       },
-      success: function(data) {
+      success: function (data) {
         console.log('connected to spotify');
       },
-      error: function(err) {
+      error: function (err) {
         console.log('connection to spotify error');
       }
     });
@@ -28,9 +29,10 @@ export default Ember.Route.extend({
       slaves: slaves
     });
   },
-  setupController: function(controller, model, transition) {
+  setupController: function (controller, model, transition) {
     this._super(controller, model);
     controller.set('model', model);
+    this.get('slave').setup(model.slaves);
   }
 
 });
