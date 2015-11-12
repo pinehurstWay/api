@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   audio_player: Ember.inject.service(),
+  queue: Ember.inject.service(),
 
   init: function () {
     this._super();
@@ -10,7 +11,7 @@ export default Ember.Component.extend({
 
   actions: {
     click: function (track) {
-      this.get('audio_player').clickTrack(track);
+      this.get('queue').clickTrack(track);
     }
   }
 });

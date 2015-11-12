@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   audio_player: Ember.inject.service(),
+  queue: Ember.inject.service(),
   playingPlaylistTracks: null,
   selectedPanel: 'playlist',
   isPlaylistPanel: function () {
@@ -37,9 +38,7 @@ export default Ember.Controller.extend({
     },
     clickTrack: function (track) {
       this.get('audio_player').clickTrack(track);
-
-      this.get('audio_player').setQueue(this.get('model.listTracks'));
-      console.log('playMusic');
+      this.get('queue').setQueue(this.get('model.listTracks'));
     },
     setSelectedPanel: function (panel) {
       this.set('selectedPanel', panel);

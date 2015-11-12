@@ -10,7 +10,6 @@ export default ApplicationAdapter.extend({
 
   handleResponse: function(status, header, payload) {
     this._super(status, header, payload);
-
     if (!payload && !payload.tracks) {
       return undefined;
     }

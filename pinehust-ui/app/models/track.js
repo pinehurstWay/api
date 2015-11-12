@@ -15,5 +15,6 @@ export default DS.Model.extend({
   }.property('duration'),
   trackURI: DS.attr('string'),
   thumbnail: DS.attr('string', {defaultValue: '/img/no-music.png'}),
-  isActive: DS.attr('boolean', {defaultValue: false})
+  isActive: DS.attr('boolean', {defaultValue: false}),
+  visibleInQueue: DS.attr('boolean', {defaultValue: true})
 });

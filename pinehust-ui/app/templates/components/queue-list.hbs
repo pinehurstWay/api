@@ -1,4 +1,5 @@
 <div class="table-responsive">
+  <h3>CURRENT TRACKS</h3>
   <table class="table table-striped">
       <thead>
           <tr>
@@ -11,21 +12,57 @@
           </tr>
       </thead>
       <tbody>
-        {{#each audio_player.displayedQeue as |track|}}
-          <tr class="" {{action 'click' track}}>
-            <td>
-              {{#if track.isActive}}
-                <i class="fa fa-play fa-fw"></i>
-              {{/if}}
-            </td>
-            <td>
-              <img src="{{track.thumbnail}}" alt="logo" width=35 height=35/>
-            </td>
-            <td>{{track.name}}</td>
-            <td>{{track.artist}}</td>
-            <td>{{track.album}}</td>
-            <td>{{track.durationFormated}}</td>
+        <tr class="" {{action 'click' audio_player.playingTrack}}>
+          <td>
+            {{#if audio_player.isPlaying}}
+              <i class="fa fa-play fa-fw"></i>
+            {{else if audio_player.isPaused}}
+              <i class="fa fa-pause fa-fw"></i>
+            {{else if audio_player.isStopped}}
+              <i class="fa fa-stop fa-fw"></i>
+            {{/if}}
+          </td>
+          <td>
+            <img src="{{audio_player.playingTrack.thumbnail}}" alt="logo" width=35 height=35/>
+          </td>
+          <td>{{audio_player.playingTrack.name}}</td>
+          <td>{{audio_player.playingTrack.artist}}</td>
+          <td>{{audio_player.playingTrack.album}}</td>
+          <td>{{audio_player.playingTrack.durationFormated}}</td>
+        </tr>
+      </tbody>
+  </table>
+  <p></p>
+  <h3>NEXT TRACKS</h3>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th></th>
+              <th>#</th>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Album</th>
+              <th>Duration</th>
           </tr>
+      </thead>
+      <tbody>
+        {{#each queue.displayedQueue as |track|}}
+          {{#if track.visibleInQueue}}
+            <tr class="" {{action 'click' track}}>
+              <td>
+                {{#if track.isActive}}
+                  <i class="fa fa-play fa-fw"></i>
+                {{/if}}
+              </td>
+              <td>
+                <img src="{{track.thumbnail}}" alt="logo" width=35 height=35/>
+              </td>
+              <td>{{track.name}}</td>
+              <td>{{track.artist}}</td>
+              <td>{{track.album}}</td>
+              <td>{{track.durationFormated}}</td>
+            </tr>
+          {{/if}}
         {{/each}}
       </tbody>
   </table>

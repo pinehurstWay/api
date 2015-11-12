@@ -3,9 +3,8 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   store: Ember.inject.service(),
   slave: Ember.inject.service(),
+  queue: Ember.inject.service(),
   player: null,
-  queue: [],
-  //callbacks: [],
   isStopped: true,
   isPaused:false,
   isPlaying: false,
@@ -13,31 +12,10 @@ export default Ember.Service.extend({
   playingTrack: null,
   playerDurationPercent: 0,
   audioPlayer: null,
-  musicIndex: function () {
-    return this.get('queue').indexOf(this.get('playingTrack'));
-  }.property('queue,playingTrack'),
+
   slaveListActiveName: function () {
     return this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
   }.property('slave.slaveList.@each.isActive'),
-
-
-  // on: function(event, callback, context) {
-  //   this.get('callbacks').pushObject({
-  //     'event': event,
-  //     'callback': callback.bind(context)
-  //   });
-  // },
-  //
-  setQueue: function (tracks) {
-    this.set('queue', tracks);
-  },
-
-  displayedQeue: function () {
-    this.get('queue').forEach(function (track) {
-        track.set('isActive', track.id === this.get('playingTrack.id'));
-    }.bind(this));
-    return this.get('queue');
-  }.property('queue.@each,playingTrack'),
 
   clickTrack: function (track) {
     this.loadTrack(track);
@@ -55,30 +33,16 @@ export default Ember.Service.extend({
   },
 
   trackEnded: function () {
-    var lastIndex = this.get('queue').get('length') - 1;
-    var musicIndex = this.get('musicIndex');
+    var lastIndex = this.get('queue').get('queue').get('length') - 1;
+    var musicIndex = this.get('queue').get('playingMusicIndex');
 
     if (musicIndex < lastIndex) {
-      this.clickTrack(this.get('queue').objectAt(musicIndex + 1));
+      this.clickTrack(this.get('queue').get('queue').objectAt(musicIndex + 1));
     } else {
       console.log('playlist empty');
       this.stopPlayer();
     }
     this.get('player').currentTime = 0;
-  },
-
-  stopPlayer: function () {
-    this.get('player').pause();
-    this.get('player').currentTime = 0;
-    this.playerEnded();
-  },
-
-  playerEnded: function () {
-    this.set('playerCurrentTime', '0:00');
-    this.set('playerDurationPercent', 0);
-    this.set('isPlaying', false);
-    this.set('isStopped', true);
-    this.set('isPaused', false);
   },
 
   updateTime: function () {
@@ -162,9 +126,6 @@ export default Ember.Service.extend({
 
   stop: function () {
     this.stopPlayer();
-    this.set('playingTrack', null);
-
-    this.get('player').pause();
     if (this.get('slaveListActiveName').get('length') === 0) {
       return;
     }
@@ -183,9 +144,25 @@ export default Ember.Service.extend({
     });
   },
 
+  stopPlayer: function () {
+    this.get('player').pause();
+    this.get('player').currentTime = 0;
+    this.playerEnded();
+  },
+
+  playerEnded: function () {
+    this.set('playerCurrentTime', '0:00');
+    this.set('playerDurationPercent', 0);
+    this.set('isPlaying', false);
+    this.set('isStopped', true);
+    this.set('isPaused', false);
+  },
+
+
+
   previous: function () {
-    var lastIndex = this.get('queue').get('length') - 1;
-    var musicIndex = this.get('musicIndex');
+    var lastIndex = this.get('queue').get('queue').get('length') - 1;
+    var musicIndex = this.get('queue').get('playingMusicIndex');
 
     if (!this.get('player') || !this.get('player').currentTime) {
       return;
@@ -193,9 +170,9 @@ export default Ember.Service.extend({
 
     if (this.get('player').currentTime > 5 || musicIndex === 0) {
       this.get('player').currentTime = 0;
-      this.clickTrack(this.get('queue').objectAt(musicIndex));
+      this.clickTrack(this.get('queue').get('queue').objectAt(musicIndex));
     } else {
-      this.clickTrack(this.get('queue').objectAt(musicIndex - 1));
+      this.clickTrack(this.get('queue').get('queue').objectAt(musicIndex - 1));
     }
   },
 
