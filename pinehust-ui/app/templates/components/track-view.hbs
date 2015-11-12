@@ -31,9 +31,11 @@
                 <i class="fa fa-pause"></i>
               </button>
             {{/if}}
-            <button {{action 'stop'}} type="button" class="btn btn-default btn-circle btn-xl">
-              <i class="fa fa-stop"></i>
-            </button>
+            {{#unless hideStop}}
+              <button {{action 'stop'}} type="button" class="btn btn-default btn-circle btn-xl">
+                <i class="fa fa-stop"></i>
+              </button>
+            {{/unless}}
             <button {{action 'next'}} type="button" class="btn btn-default btn-circle btn-xl">
               <i class="fa fa-forward"></i>
             </button>

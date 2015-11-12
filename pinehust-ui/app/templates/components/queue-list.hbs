@@ -1,0 +1,32 @@
+<div class="table-responsive">
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th></th>
+              <th>#</th>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Album</th>
+              <th>Duration</th>
+          </tr>
+      </thead>
+      <tbody>
+        {{#each audio_player.displayedQeue as |track|}}
+          <tr class="" {{action 'click' track}}>
+            <td>
+              {{#if track.isActive}}
+                <i class="fa fa-play fa-fw"></i>
+              {{/if}}
+            </td>
+            <td>
+              <img src="{{track.thumbnail}}" alt="logo" width=35 height=35/>
+            </td>
+            <td>{{track.name}}</td>
+            <td>{{track.artist}}</td>
+            <td>{{track.album}}</td>
+            <td>{{track.durationFormated}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+  </table>
+</div>

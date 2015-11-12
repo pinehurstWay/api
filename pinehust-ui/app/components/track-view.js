@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   audio_player: Ember.inject.service(),
+  hideStop: false,
 
   isComponentVisible: function () {
     return this.get('audio_player.playingTrack') != null;

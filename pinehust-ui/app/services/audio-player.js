@@ -32,6 +32,13 @@ export default Ember.Service.extend({
     this.set('queue', tracks);
   },
 
+  displayedQeue: function () {
+    this.get('queue').forEach(function (track) {
+        track.set('isActive', track.id === this.get('playingTrack.id'));
+    }.bind(this));
+    return this.get('queue');
+  }.property('queue.@each,playingTrack'),
+
   clickTrack: function (track) {
     this.loadTrack(track);
     this.set('playingTrack', track);

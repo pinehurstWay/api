@@ -1,6 +1,30 @@
+<div>
+  {{search-input}}
+  <div style="float: right; width: 100px;margin-top: 10px;">
+    <button {{action "setSelectedPanel" 'search'}} type="button" class="btn btn-default btn-circle">
+      <i class="fa fa-search fa-fw"></i>
+    </button>
+    <button {{action "setSelectedPanel" 'playlist'}} type="button" class="btn btn-default btn-circle">
+      <i class="fa fa fa-list fa-fw"></i>
+    </button>
+    <button {{action "setSelectedPanel" 'queue'}} type="button" class="btn btn-default btn-circle">
+      <i class="fa fa fa-play fa-fw"></i>
+    </button>
+  </div>
+</div>
+<div style="clear:both;"></div>
+{{#if isPlaylistPanel}}
 {{list-playlists clickPlaylist="clickPlaylist" selectedPlaylist=model.selectedPlaylist listPlaylists=model.playlists}}
-
 {{list-musics clickTrack="clickTrack" listTracks=model.listTracks}}
+{{else if isSearchPanel}}
+<div class="col-lg-8">
+  {{search-list}}
+</div>
+{{else if isQueuePanel}}
+<div class="col-lg-8">
+  {{queue-list}}
+</div>
+{{/if}}
 
 <div class="col-lg-4">
   {{track-view}}

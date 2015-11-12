@@ -3,6 +3,19 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   audio_player: Ember.inject.service(),
   playingPlaylistTracks: null,
+  selectedPanel: 'playlist',
+  isPlaylistPanel: function () {
+    return this.get('selectedPanel') === 'playlist';
+  }.property('selectedPanel'),
+
+  isSearchPanel: function () {
+    return this.get('selectedPanel') === 'search';
+  }.property('selectedPanel'),
+
+  isQueuePanel: function () {
+    return this.get('selectedPanel') === 'queue';
+  }.property('selectedPanel'),
+
 
   setMusicsByPlaylist:function (playlist) {
     this.set('model.selectedPlaylist', playlist.get('id'));
@@ -28,5 +41,9 @@ export default Ember.Controller.extend({
       this.get('audio_player').setQueue(this.get('model.listTracks'));
       console.log('playMusic');
     },
+    setSelectedPanel: function (panel) {
+      this.set('selectedPanel', panel);
+    }
+
   }
 });
