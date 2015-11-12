@@ -29,10 +29,6 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
 
     console.log(req.method);
-    if (req.method !== 'OPTIONS') {
-        console.log('add header');
-
-    }
     next();
 });
 // app.use(require('cors'));
