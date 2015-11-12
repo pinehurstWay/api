@@ -6,6 +6,14 @@ app.set('port', process.env.PORT || 9000);
 var server = http.createServer(app);
 
 
+server.on('connection', function(socket) {
+    console.log("A new connection was made by a client.");
+    socket.setTimeout(5000 * 1000);
+    // 30 second timeout. Change this as you see fit.
+});
+
+
+
 var MusicPlayer = require("./MusicPlayerClass");
 
 

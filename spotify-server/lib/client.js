@@ -82,7 +82,6 @@ SpotifyClient.prototype.getPlayLists = function (username, password) {
     var self = this;
     var spotifyLib = spotify;
 
-    //Login
     if (!self.username)self.username = username;
     if (!self.password)self.password = password;
     console.log('Connecting to Spotify for playlists');

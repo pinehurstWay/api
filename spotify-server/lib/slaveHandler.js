@@ -2,7 +2,7 @@
  * Created by mlengla on 11/8/15.
  */
 
-var request = require("request");
+var request = require("request").forever();
 //slave is declared in main server as global
 
 exports.playMusic = function (slaveName, musicStream, musicName, next) {
