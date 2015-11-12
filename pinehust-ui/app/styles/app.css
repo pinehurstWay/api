@@ -31,3 +31,7 @@
 	font-weight: bold;
 	color: #666;
 }
+
+#wrapper #page-wrapper {
+  padding: 0;
+}

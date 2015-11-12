@@ -14,8 +14,12 @@
 </div>
 <div style="clear:both;"></div>
 {{#if isPlaylistPanel}}
-{{list-playlists clickPlaylist="clickPlaylist" selectedPlaylist=model.selectedPlaylist listPlaylists=model.playlists}}
-{{list-musics clickTrack="clickTrack" listTracks=model.listTracks}}
+  <div class="col-lg-3">
+    {{list-playlists clickPlaylist="clickPlaylist" selectedPlaylist=model.selectedPlaylist listPlaylists=model.playlists}}
+  </div>
+  <div class="col-lg-5">
+    {{list-musics clickTrack="clickTrack" listTracks=model.listTracks}}
+  </div>
 {{else if isSearchPanel}}
 <div class="col-lg-8">
   {{search-list}}

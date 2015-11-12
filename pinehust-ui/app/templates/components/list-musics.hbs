@@ -1,9 +1,24 @@
-<div class="col-lg-4">
-    <div class="panel-body">
-        <div class="list-group">
+{{!-- <div class="panel-body">
+  <div class="list-group"> --}}
+  {{!-- </div>
+</div> --}}
+
+<div class="table-responsive">
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th></th>
+              <th>#</th>
+              <th>Title</th>
+              <th>Artist</th>
+              {{!-- <th>Album</th> --}}
+              <th>Duration</th>
+          </tr>
+      </thead>
+      <tbody>
           {{#each displayedTracksList as |track|}}
             {{track-item clickTrack="clickTrack" model=track}}
           {{/each}}
-        </div>
-    </div>
+      </tbody>
+  </table>
 </div>

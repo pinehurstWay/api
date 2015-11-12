@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr class="" {{action 'click' audio_player.playingTrack}}>
-          <td>
+          <td style="vertical-align: middle;">
             {{#if audio_player.isPlaying}}
               <i class="fa fa-play fa-fw"></i>
             {{else if audio_player.isPaused}}
@@ -37,7 +37,6 @@
   <table class="table table-striped">
       <thead>
           <tr>
-              <th></th>
               <th>#</th>
               <th>Title</th>
               <th>Artist</th>
@@ -49,11 +48,6 @@
         {{#each queue.displayedQueue as |track|}}
           {{#if track.visibleInQueue}}
             <tr class="" {{action 'click' track}}>
-              <td>
-                {{#if track.isActive}}
-                  <i class="fa fa-play fa-fw"></i>
-                {{/if}}
-              </td>
               <td>
                 <img src="{{track.thumbnail}}" alt="logo" width=35 height=35/>
               </td>

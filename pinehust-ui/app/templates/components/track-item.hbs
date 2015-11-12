@@ -1,5 +1,20 @@
-<a {{action "clickTrackItem" model}} class="{{if model.isActive 'active'}} list-group-item">
-    <i class="fa fa-tasks fa-fw"></i> {{model.name}}
-    <span class="pull-right text-muted small" style="background: white;border-radius: 9px;padding: 2px 8px;"><em>{{model.durationFormated}}</em>
-    </span>
-</a>
+<tr {{action "clickTrackItem" model}} class="{{if model.isActive 'active'}}">
+  <td style="vertical-align: middle;">
+    {{#if model.isActive}}
+      {{#if audio_player.isPlaying}}
+        <i class="fa fa-play fa-fw"></i>
+      {{else if audio_player.isPaused}}
+        <i class="fa fa-pause fa-fw"></i>
+      {{else if audio_player.isStopped}}
+        <i class="fa fa-stop fa-fw"></i>
+      {{/if}}
+    {{/if}}
+  </td>
+  <td>
+    <img src="{{model.thumbnail}}" alt="logo" width=35 height=35/>
+  </td>
+  <td>{{model.name}}</td>
+  <td>{{model.artist}}</td>
+  {{!-- <td>{{model.album}}</td> --}}
+  <td>{{model.durationFormated}}</td>
+</tr>

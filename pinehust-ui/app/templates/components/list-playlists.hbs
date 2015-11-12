@@ -1,9 +1,7 @@
-<div class="col-lg-4">
-    <div class="panel-body">
-        <div class="list-group">
-          {{#each displayedPlaylistsList as |playlist|}}
-            {{playlist-item clickPlaylist="clickPlaylist" model=playlist}}
-          {{/each}}
-        </div>
-    </div>
+<div class="panel-body">
+  <div class="list-group">
+    {{#each displayedPlaylistsList as |playlist|}}
+      {{playlist-item clickPlaylist="clickPlaylist" model=playlist}}
+    {{/each}}
+  </div>
 </div>
