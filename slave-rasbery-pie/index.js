@@ -30,7 +30,7 @@ app.all('/music', function (req, res) {
 
 app.get('/volume/:volume', function (req, res) {
     console.log("changing volume");
-    v.setVolume(req.params.volume);
+    stream.setVolume(req.params.volume);
     res.send({"success": true});
 });
 
