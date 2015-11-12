@@ -310,15 +310,18 @@ SpotifyClient.prototype.playTrackByURITest = function (uri, slaves, res) {
             //
 
             //res.send({"success":true})
-            var i = slaves.length;
-            slaves.forEach(function (slaveName) {
-                slaveHandler.playMusic(slaveName, musicStream, track.name, function () {
-                    if (--i == 0) {
-                        spotify.disconnect();
-                    }
-                });
-            });
 
+            if (slaves) {
+
+                var i = slaves.length;
+                slaves.forEach(function (slaveName) {
+                    slaveHandler.playMusic(slaveName, musicStream, track.name, function () {
+                        if (--i == 0) {
+                            spotify.disconnect();
+                        }
+                    });
+                });
+            }
             //musicStream.pipe(res);
             res.send({"success": true})
         });
@@ -326,6 +329,10 @@ SpotifyClient.prototype.playTrackByURITest = function (uri, slaves, res) {
 };
 
 SpotifyClient.prototype.setVolume = function (slaves, next) {
+    if (!slaves) {
+        return;
+    }
+
     var i = slaves.length;
     slaves.forEach(function (slave) {
         slaveHandler.setVolume(slave.name, slave.volume, function () {
@@ -335,6 +342,9 @@ SpotifyClient.prototype.setVolume = function (slaves, next) {
 };
 
 SpotifyClient.prototype.pause = function (slaves, next) {
+    if (!slaves) {
+        return;
+    }
     var i = slaves.length;
     slaves.forEach(function (slave) {
         slaveHandler.pause(slave, function () {
@@ -344,6 +354,10 @@ SpotifyClient.prototype.pause = function (slaves, next) {
 };
 
 SpotifyClient.prototype.resume = function (slaves, next) {
+    if (!slaves) {
+        return;
+    }
+
     var i = slaves.length;
     slaves.forEach(function (slave) {
         slaveHandler.resume(slave, function () {

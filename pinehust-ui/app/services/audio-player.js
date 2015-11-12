@@ -118,7 +118,7 @@ export default Ember.Service.extend({
     this.set('isStopped', false);
     this.set('isPaused', false);
 
-    if (!this.get('slaveListActiveName')) {
+    if (this.get('slaveListActiveName').get('length') === 0) {
       return;
     }
 
@@ -142,7 +142,7 @@ export default Ember.Service.extend({
     this.set('isStopped', false);
     this.set('isPaused', true);
 
-    if (!this.get('slaveListActiveName')) {
+    if (this.get('slaveListActiveName').get('length') === 0) {
       return;
     }
 
@@ -165,7 +165,7 @@ export default Ember.Service.extend({
     this.set('playingTrack', null);
 
     this.get('player').pause();
-    if (!this.get('slaveListActiveName')) {
+    if (this.get('slaveListActiveName').get('length') === 0) {
       return;
     }
 
