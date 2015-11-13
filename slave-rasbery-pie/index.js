@@ -19,7 +19,7 @@ var MusicPlayer = require("./MusicPlayerClass");
 
 var stream;
 app.all('/music', function (req, res) {
-    if (stream && stream.STATE == "PLAY")stream.stop();
+    if (stream && stream.STATE == "PLAYING")stream.stop();
     stream = new MusicPlayer.Class(req);
     stream.playStream(function(){
         res.set({'MusicOver': 'true'});

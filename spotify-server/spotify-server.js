@@ -188,6 +188,14 @@ app.get('/slaves', function (req, res) {
     res.send(slaves)
 });
 
+app.post('/addMusicToSlaves', function (req, res) {
+    var track = req.body.track;
+    var parsedSlaves = req.body.items;
+    parsedSlaves.forEach( function (slave) {
+        slaves[slave.name].queue.push(track);
+    });
+    res.send({success:true});
+});
 
 app.get('/playMusicTest/:trackId', function (req, res) {
     var trackURI = req.params.trackId;
@@ -197,7 +205,6 @@ app.get('/playMusicTest/:trackId', function (req, res) {
     spotifyClient.login(username, password);
     spotifyClient.newInstance(username, password).playTrackByURITest(trackURI, slaves, res);
 });
-
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function () {

@@ -5,7 +5,7 @@
 var request = require("request").forever();
 //slave is declared in main server as global
 
-exports.playMusic = function (slaveName, musicStream, musicName, next) {
+exports.playMusic = function (slaveName, musicStream, musicName, spotifyClient) {
     var slave = slaves[slaveName];
     var ip = slave.ip;
 
@@ -33,7 +33,15 @@ exports.playMusic = function (slaveName, musicStream, musicName, next) {
         .on("end", function () {
             slave.status = "STOPPED";
             delete slave.trackName;
-            next();
+            delete slave.queue[0];
+
+            if (slave.queue[0]) {
+                spotifyClient.playTrackByURI(slave.queue[0].trackURI, [slave]);
+            }
+
+
+            console.log("finish streaming music")
+            //next();
         });
     slaves[slaveName].status = "PLAYING";
 };

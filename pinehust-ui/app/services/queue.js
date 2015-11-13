@@ -28,9 +28,22 @@ export default Ember.Service.extend({
     this.refreshQueue();
   },
 
-  refreshQueue: function () {
-    var index = this.get('')
+  addMusicToSlaves: function (track) {
+debugger
+    Ember.$.ajax({
+      url: '/addMusicToSlaves',
+      type: 'POST',
+      cache: false,
+      dataType: 'json',
+      data: {track: track, slave: ['ptipy']},
+      success: function (result) {
+        debugger;
+      }.bind(this),
+      error: function (err) {
+      }
+    });
   },
+
 
   setup: function () {
 
