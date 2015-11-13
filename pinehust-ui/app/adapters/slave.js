@@ -26,13 +26,6 @@ export default ApplicationAdapter.extend({
         "trackName": payload[slave].trackName,
         "status": payload[slave].status
       });
-      result.slaves.push({
-        "id": "browser",
-        "name": "ordinateur",
-        "ip": "browser",
-        "trackName": null,
-        "status": null
-      });
     }
     return result;
   }

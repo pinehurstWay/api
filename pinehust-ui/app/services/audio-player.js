@@ -6,7 +6,7 @@ export default Ember.Service.extend({
   queue: Ember.inject.service(),
   player: null,
   isStopped: true,
-  isPaused:false,
+  isPaused: false,
   isPlaying: false,
   playerCurrentTime: '0:00',
   playingTrack: null,
@@ -129,7 +129,6 @@ export default Ember.Service.extend({
     if (this.get('slaveListActiveName').get('length') === 0) {
       return;
     }
-
     Ember.$.ajax({
       url: '/stop',
       type: 'POST',
@@ -159,7 +158,6 @@ export default Ember.Service.extend({
   },
 
 
-
   previous: function () {
     var lastIndex = this.get('queue').get('queue').get('length') - 1;
     var musicIndex = this.get('queue').get('playingMusicIndex');
@@ -183,19 +181,22 @@ export default Ember.Service.extend({
     }];
 
     this.get('slave').updateSlaveVolume(slave, volume.toString());
-
-    Ember.$.ajax({
-      url: '/volume',
-      type: 'POST',
-      crossDomain: true,
-      cache: false,
-      dataType: 'json',
-      data: {slave: volumeObj},
-      success: function (data) {
-      }.bind(this),
-      error: function (err) {
-      }
-    });
+    if (slave.get('name') == "ordinateur") {
+      this.get('player').volume = volume;
+    } else {
+      Ember.$.ajax({
+        url: '/volume',
+        type: 'POST',
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        data: {slave: volumeObj},
+        success: function (data) {
+        }.bind(this),
+        error: function (err) {
+        }
+      });
+    }
   },
 
   setup: function (element, preferences) {
@@ -204,7 +205,7 @@ export default Ember.Service.extend({
     $('#playerAudio').on('ended', this.trackEnded.bind(this));
 
 
-    var track = this.get('store').createRecord('track',{
+    var track = this.get('store').createRecord('track', {
       artist: '---',
       album: '---',
       name: '---',
