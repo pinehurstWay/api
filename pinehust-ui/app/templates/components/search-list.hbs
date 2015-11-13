@@ -1,1 +1,5 @@
-music searc
+{{#each search.listSearchResultsDisplayed as |track|}}
+  {{search-item model=track}}
+{{else}}
+  <h3>No result found</h3>
+{{/each}}

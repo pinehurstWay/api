@@ -23,12 +23,11 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
-    if(req.headers.host=="http://localhost:4200"){
-        res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Credentials, Origin, Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
-        res.header('Access-Control-Allow-Credentials', true);
-    }
+
+    res.header("Access-Control-Allow-Origin", "http://" + req.headers.host);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Credentials, Origin, Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
+    res.header('Access-Control-Allow-Credentials', true);
 
 
     console.log(req.method);

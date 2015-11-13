@@ -1,13 +1,14 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  search: Ember.inject.service(),
-
+  tagName: '',
   init: function () {
     this._super();
   },
 
   actions: {
-
+    click: function (track) {
+      this.get('search').findTrack(track);
+    }
   }
 });

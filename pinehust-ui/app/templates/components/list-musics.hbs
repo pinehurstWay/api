@@ -13,7 +13,9 @@
       <tbody>
           {{#each displayedTracksList as |track|}}
             {{track-item clickTrack="clickTrack" model=track}}
-          {{/each}}
+            {{else}}
+              <img src="/img/loading.gif" alt="Loading..." width="80" height="80" />
+            {{/each}}
       </tbody>
   </table>
 </div>
