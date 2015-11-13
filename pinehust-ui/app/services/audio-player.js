@@ -25,7 +25,7 @@ export default Ember.Service.extend({
 
   loadTrack: function (track) {
     var slaves = this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
-    this.get('player').src = 'http://localhost:3000/playMusic/' + track.get('trackURI') + '?slaves=' + JSON.stringify(slaves);
+    this.get('player').src = '/playMusic/' + track.get('trackURI') + '?slaves=' + JSON.stringify(slaves);
     this.get('player').load();
     this.set('isPlaying', true);
     this.set('isStopped', false);
@@ -61,7 +61,7 @@ export default Ember.Service.extend({
 
   getAlbumArt: function (track) {
     Ember.$.ajax({
-      url: 'http://localhost:3000/spotify-server/album-art/' + track.get('trackURI'),
+      url: '/spotify-server/album-art/' + track.get('trackURI'),
       crossDomain: true,
       cache: false,
       dataType: 'json',
@@ -87,7 +87,7 @@ export default Ember.Service.extend({
     }
 
     Ember.$.ajax({
-      url: 'http://localhost:3000/resume',
+      url: '/resume',
       type: 'POST',
       crossDomain: true,
       cache: false,
@@ -111,7 +111,7 @@ export default Ember.Service.extend({
     }
 
     Ember.$.ajax({
-      url: 'http://localhost:3000/pause',
+      url: '/pause',
       type: 'POST',
       crossDomain: true,
       cache: false,
@@ -131,7 +131,7 @@ export default Ember.Service.extend({
     }
 
     Ember.$.ajax({
-      url: 'http://localhost:3000/stop',
+      url: '/stop',
       type: 'POST',
       crossDomain: true,
       cache: false,
@@ -185,7 +185,7 @@ export default Ember.Service.extend({
     this.get('slave').updateSlaveVolume(slave, volume.toString());
 
     Ember.$.ajax({
-      url: 'http://localhost:3000/volume',
+      url: '/volume',
       type: 'POST',
       crossDomain: true,
       cache: false,

@@ -11,7 +11,7 @@ export default Ember.Service.extend({
 
   findTrack: function () {
     Ember.$.ajax({
-      url: 'http://localhost:3000/spotify-server/track',
+      url: '/spotify-server/track',
       crossDomain: true,
       cache: false,
       dataType: 'json',
@@ -35,7 +35,7 @@ export default Ember.Service.extend({
 
   search: function(query) {
     Ember.$.ajax({
-      url: 'http://localhost:3000/spotify-server/search/' + query,
+      url: '/spotify-server/search/' + query,
       crossDomain: true,
       cache: false,
       dataType: 'json',

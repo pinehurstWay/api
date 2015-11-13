@@ -10,7 +10,7 @@ export default Ember.Route.extend({
     document.cookie = 'username=AdrienVinches;password=zeswEG7F;';
 
     return Ember.$.ajax({
-      url: 'http://localhost:3000/spotify-server/login/adrienvinches:zeswEG7F',
+      url: '/spotify-server/login/adrienvinches:zeswEG7F',
       crossDomain: true,
       cache: false,
       dataType: 'json',
