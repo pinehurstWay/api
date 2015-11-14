@@ -1,5 +1,9 @@
-{{#each search.listSearchResultsDisplayed as |track|}}
-  {{search-item model=track}}
+{{#if search.isLoading}}
+  <img src="/img/loading.gif" alt="Loading..." width="80" height="80" />
 {{else}}
-  <h3>No result found</h3>
-{{/each}}
+  {{#each search.listSearchResultsDisplayed as |track|}}
+    {{search-item model=track}}
+  {{else}}
+    <h3>No result found</h3>
+  {{/each}}
+{{/if}}
