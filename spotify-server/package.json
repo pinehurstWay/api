@@ -10,11 +10,7 @@
     "express": "3.1.1",
     "express-session": "1.0.2",
     "install": "^0.2.6",
-    "lame": "^1.2.3",
-    "npm": "^3.3.12",
-    "pcm-volume": "^1.0.0",
     "request": "^2.65.0",
-    "speaker": "^0.2.6",
     "spotify-web": "git://github.com/fuzeman/node-spotify-web.git#feature/ping-pong-fix",
     "tinycolor": "0.0.1",
     "xml2js": "0.4.2"

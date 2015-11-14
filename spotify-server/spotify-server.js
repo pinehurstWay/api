@@ -1,14 +1,16 @@
-var express = require('express'),
-    session = require('express-session');
-cookieParser = require('cookie-parser');
-http = require('http'),
+'use strict';
+const express = require('express'),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser'),
+    http = require('http'),
     ejs = require('ejs'),
     path = require('path'),
     spotifyClient = require('./lib/client'),
+    SpotifyClientClean = require('./lib/cleanClient'),
     color = require('tinycolor');
 
 //make it global
-slaves = require("./resources/slaves");
+global.slaves = require("./resources/slaves");
 
 //Don't stop this server if an exception goes uncaught
 process.on('uncaughtException', function (err) {
@@ -23,20 +25,23 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
-
     res.header("Access-Control-Allow-Origin", "http://" + req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Credentials, Origin, Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
     res.header('Access-Control-Allow-Credentials', true);
-
-
     console.log(req.method);
     next();
 });
-// app.use(require('cors'));
-app.set('view engine', 'ejs');
+
 app.use(cookieParser('asdklfjl43u8t943htinjgkrenseiro3u8urijoewfdkls'));
 app.use(session());
+let spotifyClientInstance;
+app.use(function (req, res, next) {
+    if (!spotifyClientInstance) {
+        spotifyClientInstance = new SpotifyClientClean.class(req.cookies.username, req.cookies.password);
+    }
+    next();
+});
 
 //Index
 app.get('/', function (req, res) {
@@ -50,42 +55,13 @@ app.get('/spotify-server/logout', function (req, res) {
 });
 
 //Get login information
-app.get('/spotify-server/login/:usernameAndpassword', function (req, res) {
-    var up = req.params.usernameAndpassword;
-    var uname = up.split(':')[0];
-    var pw = up.split(':')[1];
-
-    if (req.session.loggedin && uname == 'check') {
-        res.send({success: 'success'});
-        return;
-    }
-
-    if (!req.session.loggedin && uname == 'check') {
-        res.send({error: {message: "invalid login"}});
-        return;
-    }
-
-    spotifyClient.newInstance(uname, pw).login()
-        .on('error', function (e) {
-            res.send({error: {message: "invalid login"}});
-        })
-        .on('success', function (data) {
-            req.session.username = uname;
-            req.session.password = pw;
-            req.session.loggedin = true;
-            res.send({success: 'success'});
-        });
-});
 
 //Retrieve PlayLists
 app.get('/spotify-server/playlists', function (req, res) {
-    spotifyClient.newInstance(req.session.username, req.session.password).getPlayLists()
-        .on('playListsReady', function (playlists) {
+    spotifyClientInstance.getPlayLists()
+        .then(playlists=> {
             res.send({playlists: playlists});
         })
-        .on('error', function (err) {
-            res.send({error: err});
-        });
 });
 
 //Retrieve tracks for a given PlayList
@@ -155,12 +131,9 @@ app.get('/spotify-server/search/:query', function (req, res) {
 app.get('/playMusic/:trackId', function (req, res) {
     var trackURI = req.params.trackId;
     var slaves = JSON.parse(req.query.slaves);
-    //Just pass the response here because we need to stream to it
-    var username = req.session.username;
-    var password = req.session.password;
-    //var username = "adrienvinches";
-    //var password = "zeswEG7F";
-    spotifyClient.newInstance(username, password).playTrackByURI(trackURI, slaves, res);
+
+    req.session.spotifyClientInstance.playMusic(trackURI, slaves)
+        .then((music)=> music.pipe(res));
 });
 
 app.post('/volume', function (req, res) {
@@ -191,10 +164,10 @@ app.get('/slaves', function (req, res) {
 app.post('/addMusicToSlaves', function (req, res) {
     var track = req.body.track;
     var parsedSlaves = req.body.items;
-    parsedSlaves.forEach( function (slave) {
+    parsedSlaves.forEach(function (slave) {
         slaves[slave.name].queue.push(track);
     });
-    res.send({success:true});
+    res.send({success: true});
 });
 
 app.get('/playMusicTest/:trackId', function (req, res) {

@@ -6,24 +6,10 @@ export default Ember.Route.extend({
   slave: Ember.inject.service(),
   beforeModel: function (transition) {
     this._super(transition);
+    document.cookie = null;
+    document.cookie = 'password=zeswEG7F;';
+    document.cookie+= 'username=AdrienVinches';
 
-    document.cookie = 'username=AdrienVinches;password=zeswEG7F;';
-
-    return Ember.$.ajax({
-      url: '/spotify-server/login/adrienvinches:zeswEG7F',
-      crossDomain: true,
-      cache: false,
-      dataType: 'json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: function (data) {
-        console.log('connected to spotify');
-      },
-      error: function (err) {
-        console.log('connection to spotify error');
-      }
-    });
   },
   model: function () {
     return Ember.RSVP.hash({

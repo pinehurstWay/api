@@ -54,8 +54,12 @@ SpotifyClient.prototype = Object.create(EventEmitter.prototype, {
 
 var spotifyClientVar = null;
 SpotifyClient.prototype.newInstance = function (username, password) {
-    if(spotifyClientVar)return spotifyClientVar
-    else{
+    if (spotifyClientVar) {
+        console.log('using old instance')
+        return spotifyClientVar;
+    }
+    else {
+        console.log('new instance')
         spotifyClientVar = new SpotifyClient(username, password);
         return spotifyClientVar;
     }
@@ -270,11 +274,10 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
             //
 
             //res.send({"success":true})
-            var i = slaves.length;
             slaves.forEach(function (slaveName) {
                 slaveHandler.playMusic(slaveName, musicStream, track.name, this);
             });
-            
+
             if (!res) return;
 
             musicStream.pipe(res);
