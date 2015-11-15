@@ -105,24 +105,22 @@ class Spotify {
     }
 
     playMusic(trackURI, slaves) {
-        return new Promise((resolve, reject)=> {
-            this._getInstance()
-                .then((instance)=> {
-                    instance.get(trackURI, (err, track)=> {
-                        if (err) return reject(err);
-                        const musicStream = track.play();
-                        slaves.forEach(function (slaveName) {
-                            slaveHandler.playMusic(slaveName, musicStream, track.name, this);
-                        });
-                        resolve(track.play());
+        return this._getInstance()
+            .then((instance)=> {
+                instance.get(trackURI, (err, track)=> {
+                    if (err) return reject(err);
+                    const musicStream = track.play();
+                    slaves.forEach(function (slaveName) {
+                        slaveHandler.playMusic(slaveName, musicStream, track.name, this);
                     });
-                })
-        })
+                    return track.play();
+                });
+            })
     }
 
     getPlayLists() {
         console.log("getting playlists");
-        if (this._playlists) return resolve(this._playlists);
+        if (this._playlists) return new Promise((resolve, reject)=>resolve(this._playlists));
         this._playlists = [];
         return this._getInstance()
             .then((instance)=> {
@@ -140,6 +138,7 @@ class Spotify {
                                 if (err)reject(err);
                                 else {
                                     const playlistResult = {
+                                        "id": playlist.uri,
                                         "name": playlistInfo.attributes.name,
                                         "playlistURI": playlist.uri,
                                         "length": playlistInfo.length,
@@ -158,6 +157,7 @@ class Spotify {
                 this._playlists = playlists;
                 const result = playlists.map(x=> {
                     let y = Object.assign({}, x);
+                    y.tracks = y._tracksURI;
                     delete y._tracksURI;
                     return y;
                 });
@@ -172,6 +172,19 @@ class Spotify {
     getTracksForPlaylist(playlistURI) {
         const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0]._tracksURI;
         return this._getTacksInfo(tracksURIs)
+    }
+
+    search(query) {
+        return this._getInstance()
+            .then(instance=> {
+                console.log("query", query)
+                return new Promise((resolve, reject)=> {
+                    instance.search(query, function (err, xml) {
+                        console.log(err);
+                        debugger
+                    });
+                })
+            })
     }
 
 }

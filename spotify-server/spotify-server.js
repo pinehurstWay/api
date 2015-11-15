@@ -5,7 +5,6 @@ const express = require('express'),
     http = require('http'),
     ejs = require('ejs'),
     path = require('path'),
-    spotifyClient = require('./lib/client'),
     SpotifyClientClean = require('./lib/cleanClient'),
     color = require('tinycolor');
 
@@ -48,28 +47,26 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
-app.get('/spotify-server/logout', function (req, res) {
-    req.session.destroy(function () {
-        res.redirect('/');
-    });
-});
 
 //Get login information
 
 //Retrieve PlayLists
 app.get('/spotify-server/playlists', function (req, res) {
     let playlists;
+    //spotifyClientInstance.search("who knows").then(x=>{
+    //    debugger
+    //})
     spotifyClientInstance.getPlayLists()
         .then(playlistsTemp=> {
             playlists = playlistsTemp;
-            if (!playlists[0].tracks) return spotifyClientInstance.getTracksForPlaylist(playlists["0"].playlistURI)
+            if (!playlists[0].tracks) return spotifyClientInstance.getTracksForPlaylist(playlists["0"].playlistURI);
             else return null;
         })
         .then(playlist0Tracks=> {
             if (playlist0Tracks) {
                 playlists[0].tracks = playlist0Tracks
             }
-            res.send({playlists:playlists})
+            res.send({playlists: playlists})
         })
         .catch(e=> {
             console.log(e.stack)
@@ -77,55 +74,53 @@ app.get('/spotify-server/playlists', function (req, res) {
 });
 
 //Retrieve tracks for a given PlayList
-app.get('/spotify-server/playlist/:playlistid', function (req, res) {
-    var playlistid = req.params.playlistid;
-    var uri = 'spotify:user:' + req.session.username + ':playlist:' + playlistid;
-
-    spotifyClient.newInstance(req.session.username, req.session.password).getTracksByPlayListURI(uri)
-        .on('tracksReady', function (tracks) {
-            res.send({tracks: tracks});
+app.get('/spotify-server/playlist/:playlistURI', function (req, res) {
+    const playlistURI = req.params.playlistURI;
+    spotifyClientInstance.getTracksForPlaylist(playlistURI)
+        .then(tracks=> {
+            res.send({tracks: tracks})
         })
-        .on('error', function (err) {
-            res.send({error: err});
-        });
+        .catch(e=> {
+            console.log(e.stack)
+        })
 });
 
 //Retrieve a single track
-app.get('/spotify-server/track', function (req, res) {
-    var uri = req.query.uri;
-
-    if (req.query.searchType === 'playlist') {
-        uri = 'spotify:user:' + req.session.username + ':playlist:' + uri;
-        spotifyClient.newInstance(req.session.username, req.session.password).getTracksByPlayListURI(uri)
-            .on('tracksReady', function (tracks) {
-                res.send({tracks: tracks});
-            })
-            .on('error', function (err) {
-                res.send({error: err});
-            });
-    } else {
-        spotifyClient.newInstance(req.session.username, req.session.password).getTrackByTrackURI(uri)
-            .on('trackReady', function (track) {
-                res.send(track);
-            })
-            .on('error', function (err) {
-                res.send({error: err});
-            });
-    }
-});
+//app.get('/spotify-server/track', function (req, res) {
+//    var uri = req.query.uri;
+//
+//    if (req.query.searchType === 'playlist') {
+//        uri = 'spotify:user:' + req.session.username + ':playlist:' + uri;
+//        spotifyClient.newInstance(req.session.username, req.session.password).getTracksByPlayListURI(uri)
+//            .on('tracksReady', function (tracks) {
+//                res.send({tracks: tracks});
+//            })
+//            .on('error', function (err) {
+//                res.send({error: err});
+//            });
+//    } else {
+//        spotifyClient.newInstance(req.session.username, req.session.password).getTrackByTrackURI(uri)
+//            .on('trackReady', function (track) {
+//                res.send(track);
+//            })
+//            .on('error', function (err) {
+//                res.send({error: err});
+//            });
+//    }
+//});
 
 //Retreive album art for a given track
-app.get('/spotify-server/album-art/:trackURI', function (req, res) {
-    var trackURI = req.params.trackURI;
-
-    spotifyClient.newInstance(req.session.username, req.session.password).getAlbumArtByTrackURI(trackURI)
-        .on('albumArtReady' + trackURI, function (data) {
-            res.send(data);
-        })
-        .on('error', function (err) {
-            res.send({error: err});
-        });
-});
+//app.get('/spotify-server/album-art/:trackURI', function (req, res) {
+//    var trackURI = req.params.trackURI;
+//
+//    spotifyClient.newInstance(req.session.username, req.session.password).getAlbumArtByTrackURI(trackURI)
+//        .on('albumArtReady' + trackURI, function (data) {
+//            res.send(data);
+//        })
+//        .on('error', function (err) {
+//            res.send({error: err});
+//        });
+//});
 
 //Search (tracks only right now)
 app.get('/spotify-server/search/:query', function (req, res) {
@@ -141,10 +136,9 @@ app.get('/spotify-server/search/:query', function (req, res) {
 
 //Play a track
 app.get('/playMusic/:trackId', function (req, res) {
-    var trackURI = req.params.trackId;
-    var slaves = JSON.parse(req.query.slaves);
-
-    req.session.spotifyClientInstance.playMusic(trackURI, slaves)
+    const trackURI = req.params.trackId,
+        slaves = JSON.parse(req.query.slaves);
+    spotifyClientInstance.playMusic(trackURI, slaves)
         .then((music)=> music.pipe(res));
 });
 
