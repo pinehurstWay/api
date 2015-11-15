@@ -10,14 +10,15 @@ export default ApplicationAdapter.extend({
 
   handleResponse: function(status, header, payload) {
     this._super(status, header, payload);
-    if (!payload && !payload.tracks) {
-      return undefined;
-    }
-    payload.tracks.forEach(function (track) {
-      track.id = track.trackURI;
-      track.artist = track.artist.map(x => x.name).join(' & ');
-      track.album = track.album.name;
-    });
+    // if (!payload && !payload.tracks) {
+    //   return undefined;
+    // }
+    // payload.tracks.forEach(function (track) {
+    //   track.id = track.trackURI;
+    //   track.artist = track.artist.map(x => x.name).join(' & ');
+    //   track.album = track.album.name;
+    // });
+    debugger
     return payload;
   }
 
