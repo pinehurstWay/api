@@ -50,7 +50,7 @@ export default Ember.Service.extend({
       }
     }.bind(this));
     this.set('queue', newQueue);
-    this.get('audio_player').clickTrackFromSearch(searchedTrack);
+    this.get('audio_player').clickTrack(searchedTrack);
   },
 
 

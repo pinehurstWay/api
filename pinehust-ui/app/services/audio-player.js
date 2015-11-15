@@ -17,15 +17,9 @@ export default Ember.Service.extend({
     return this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
   }.property('slave.slaveList.@each.isActive'),
 
-  clickTrackFromSearch: function (track) {
-    this.loadTrack(track);
-    this.set('playingTrack', track);
-  },
-
   clickTrack: function (track) {
     this.loadTrack(track);
     this.set('playingTrack', track);
-    this.getAlbumArt(track);
   },
 
   loadTrack: function (track) {

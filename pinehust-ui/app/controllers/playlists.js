@@ -20,10 +20,8 @@ export default Ember.Controller.extend({
 
   setMusicsByPlaylist:function (playlist) {
     this.set('model.selectedPlaylist', playlist.get('id'));
-    var playListId = playlist.get('playlistURI').split(':')[4]
     var playlistTracks = this.get('store').query('track', {
-      uri: playListId,
-      searchType: 'playlist'
+      uri: playlist.get('playlistURI'),
     });
     this.set('model.listTracks', playlistTracks);
   },
