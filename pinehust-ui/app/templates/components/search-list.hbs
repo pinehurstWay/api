@@ -1,9 +1,40 @@
 {{#if search.isLoading}}
   <img src="/img/loading.gif" alt="Loading..." width="80" height="80" />
 {{else}}
-  {{#each search.listSearchResultsDisplayed as |track|}}
+  {{!-- {{#each search.listSearchResultsDisplayed as |track|}}
+  {{else}}
+    <h3>No result found</h3>
+  {{/each}} --}}
+
+
+  {{#each search.listSearchPlaylistsResultsDisplayed as |playlist|}}
+    {{playlist.name}}
+  {{else}}
+    <h3>No result found</h3>
+  {{/each}}
+
+  {{#each search.listSearchArtistsResultsDisplayed as |artist|}}
+    {{artist.name}}
+  {{else}}
+    <h3>No result found</h3>
+  {{/each}}
+
+  {{#each search.listSearchAlbumsResultsDisplayed as |album|}}
+    {{album.name}}
+  {{else}}
+    <h3>No result found</h3>
+  {{/each}}
+
+  {{#each search.listSearchTacksResultsDisplayed as |track|}}
     {{search-item model=track}}
   {{else}}
     <h3>No result found</h3>
   {{/each}}
+
+
+
+
+
+
+
 {{/if}}
