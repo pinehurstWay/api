@@ -14,8 +14,6 @@ export default ApplicationAdapter.extend({
     var url = '/spotify-server/' + modelName + '/' + id;
 
     return url;
-
-
   },
 
   handleResponse: function(status, header, payload) {
@@ -23,15 +21,7 @@ export default ApplicationAdapter.extend({
     if (!payload && !payload.playlists) {
       return undefined;
     }
-    payload.playlists.forEach(function (playlist) {
-      if (playlist.tracks) {
-        playlist.tracks.forEach( function (track) {
-          track.playlist = playlist.id;
-        });
-      }
-    });
 
-    debugger
     return payload;
   }
 });

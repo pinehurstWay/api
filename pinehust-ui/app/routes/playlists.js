@@ -15,7 +15,7 @@ export default Ember.Route.extend({
     });
     model.selectedPlaylist = model.playlists.get('firstObject').get('id');
     debugger
-    model.listTracks = firstPlaylistTracks;
+    model.listTracks = model.playlists.get('firstObject').get('tracks');
   },
 
   setupController: function(controller, model, transition) {
