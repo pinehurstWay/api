@@ -4,7 +4,8 @@
 "use strict";
 
 const SpotifyWeb = require('spotify-web'),
-    https = require('https');
+    https = require('https'),
+    xml2js = require('xml2js');
 
 
 class Spotify {
@@ -142,8 +143,8 @@ class Spotify {
                                         "name": playlistInfo.attributes.name,
                                         "playlistURI": playlist.uri,
                                         "length": playlistInfo.length,
-                                        "tracks": null,
-                                        "_tracksURI": playlistInfo.contents.items.map(x=>x.uri)
+                                        "tracks": playlistInfo.contents.items.map(x=>x.uri),
+                                        "_tracks": null
                                     };
                                     resolve(playlistResult)
                                 }
@@ -157,8 +158,7 @@ class Spotify {
                 this._playlists = playlists;
                 const result = playlists.map(x=> {
                     let y = Object.assign({}, x);
-                    y.tracks = y._tracksURI;
-                    delete y._tracksURI;
+                    delete y._tracks;
                     return y;
                 });
                 return result.sort((a, b)=>a.name > b.name);
@@ -181,7 +181,12 @@ class Spotify {
                 return new Promise((resolve, reject)=> {
                     instance.search(query, function (err, xml) {
                         console.log(err);
-                        debugger
+                        var parser = new xml2js.Parser();
+                        parser.on('end', function (data) {
+
+                            debugger
+                        });
+                        parser.parseString(xml);
                     });
                 })
             })
