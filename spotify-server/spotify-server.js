@@ -58,9 +58,21 @@ app.get('/spotify-server/logout', function (req, res) {
 
 //Retrieve PlayLists
 app.get('/spotify-server/playlists', function (req, res) {
+    let playlists;
     spotifyClientInstance.getPlayLists()
-        .then(playlists=> {
-            res.send({playlists: playlists});
+        .then(playlistsTemp=> {
+            playlists = playlistsTemp;
+            if (!playlists[0].tracks) return spotifyClientInstance.getTracksForPlaylist(playlists["0"].playlistURI)
+            else return null;
+        })
+        .then(playlist0Tracks=> {
+            if (playlist0Tracks) {
+                playlists[0].tracks = playlist0Tracks
+            }
+            res.send({playlists:playlists})
+        })
+        .catch(e=> {
+            console.log(e.stack)
         })
 });
 

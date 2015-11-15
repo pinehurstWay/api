@@ -122,46 +122,57 @@ class Spotify {
 
     getPlayLists() {
         console.log("getting playlists");
-        return new Promise((resolve, reject)=> {
-            if (this._playlists) return resolve(this._playlists);
-            this._playlists = [];
-            this._getInstance().then((instance)=> {
-                instance.rootlist((err, playlists)=> {
-                    Promise.all(
-                        playlists.contents.items.map(playlist=> {
-                            return new Promise((resolve, reject)=> {
-                                instance.playlist(playlist.uri, (err, playlistInfo)=> {
-                                    if (err)reject(err);
-                                    else {
-                                        playlistInfo.URI = playlist.uri;
-                                        resolve(playlistInfo)
-                                    }
-
-                                });
-                            });
-
-                        })
-                    ).then(playlists=> {
-                        Promise.all(playlists.map(playlist=> {
-                                const playlistResult = {
-                                    "name": playlist.attributes.name,
-                                    "playlistURI": playlist.URI,
-                                    "length": playlist.length
-                                };
-                                return playlistResult
-                            }))
-                            .then(playlists=> {
-                                this._playlists = playlists;
-                                resolve(playlists);
-                            })
-                            .catch(e=> {
-                                console.log(e.stack)
-                            });
+        if (this._playlists) return resolve(this._playlists);
+        this._playlists = [];
+        return this._getInstance()
+            .then((instance)=> {
+                return new Promise((resolve, reject)=> {
+                    instance.rootlist((err, playlists)=> {
+                        resolve(playlists);
                     })
                 })
             })
-        })
-    }
-}
+            .then(playlists=> {
+                return Promise.all(
+                    playlists.contents.items.map(playlist=> {
+                        return new Promise((resolve, reject)=> {
+                            this._instance.playlist(playlist.uri, (err, playlistInfo)=> {
+                                if (err)reject(err);
+                                else {
+                                    const playlistResult = {
+                                        "name": playlistInfo.attributes.name,
+                                        "playlistURI": playlist.uri,
+                                        "length": playlistInfo.length,
+                                        "tracks": null,
+                                        "_tracksURI": playlistInfo.contents.items.map(x=>x.uri)
+                                    };
+                                    resolve(playlistResult)
+                                }
 
+                            });
+                        });
+                    })
+                )
+            })
+            .then(playlists=> {
+                this._playlists = playlists;
+                const result = playlists.map(x=> {
+                    let y = Object.assign({}, x);
+                    delete y._tracksURI;
+                    return y;
+                });
+                return result.sort((a, b)=>a.name > b.name);
+            })
+            .catch(e=> {
+                console.log(e.stack)
+            });
+
+    }
+
+    getTracksForPlaylist(playlistURI) {
+        const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0]._tracksURI;
+        return this._getTacksInfo(tracksURIs)
+    }
+
+}
 exports['class'] = Spotify;
