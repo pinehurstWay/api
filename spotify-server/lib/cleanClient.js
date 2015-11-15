@@ -52,7 +52,7 @@ class Spotify {
                                         "album": song.album.name,
                                         "trackURI": trackURI,
                                         "duration": song.duration,
-                                        "thumbnail_url": covers.filter(x=> x.trackURI == trackURI)[0].thumbnail_url
+                                        "thumbnail": covers.filter(x=> x.trackURI == trackURI)[0].thumbnail_url
                                     })
                                 })
                             })
