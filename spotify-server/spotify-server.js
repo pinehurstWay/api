@@ -74,7 +74,7 @@ app.get('/spotify-server/playlists', function (req, res) {
 });
 
 //Retrieve tracks for a given PlayList
-app.get('/spotify-server/playlist/:playlistURI', function (req, res) {
+app.get('/spotify-server/track/:playlistURI', function (req, res) {
     const playlistURI = req.params.playlistURI;
     spotifyClientInstance.getTracksForPlaylist(playlistURI)
         .then(tracks=> {
