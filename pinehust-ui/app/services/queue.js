@@ -17,9 +17,6 @@ export default Ember.Service.extend({
     this.get('queue').forEach(function (track, index) {
       track.set('visibleInQueue', index > this.get('playingMusicIndex'));
       track.set('isActive', track.id === this.get('audio_player').get('playingTrack.id'));
-      if (track.get('thumbnail') === '/img/no-music.png') {
-        this.get('audio_player').getAlbumArt(track);
-      }
     }.bind(this));
     return this.get('queue');
   }.property('queue.@each,audio_player.playingTrack,playingMusicIndex'),

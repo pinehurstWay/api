@@ -7,9 +7,6 @@ export default Ember.Component.extend({
   displayedTracksList: function () {
     this.get('listTracks').forEach(function (track) {
         track.set('isActive', track.id === this.get('audio_player.playingTrack.id'));
-        if (track.get('thumbnail') === '/img/no-music.png') {
-          this.get('audio_player').getAlbumArt(track);
-        }
     }.bind(this));
     return this.get('listTracks');
   }.property('listTracks.@each,audio_player.playingTrack'),
