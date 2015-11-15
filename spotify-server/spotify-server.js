@@ -123,7 +123,9 @@ app.get('/spotify-server/track', function (req, res) {
 app.get('/spotify-server/search/:query', function (req, res) {
     const query = req.params.query;
     spotifyClientInstance.search(query)
-        .then(res.send)
+        .then(result=>{
+            res.send(result)
+        })
     .catch(e=>console.log(e.stack));
 });
 

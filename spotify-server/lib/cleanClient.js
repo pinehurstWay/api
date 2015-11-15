@@ -187,7 +187,7 @@ class Spotify {
     search(query) {
         return this._getInstance()
             .then(instance=> {
-                console.log("query", query)
+                console.log("query", query);
                 return new Promise((resolve, reject)=> {
                     instance.search(query, function (err, xml) {
                         console.log(err);
@@ -198,17 +198,18 @@ class Spotify {
                                     return {
                                         'artist': x['artist-name'][0],
                                         'name': x.name[0],
-                                        'thumbnail': x['cover'][0],
+                                        'thumbnail': spotify_util.id2uri('cover', x['cover'][0]),
                                         'albumURI': spotify_util.id2uri('album', x.id[0]),
                                         'id': spotify_util.id2uri('album', x.id[0])
                                     }
                                 }),
                                 artists: data.result.artists[0].artist.map(x=> {
+                                    if (!x.portrait) x.portrait = [{id: [null]}];
                                     return {
                                         'name': x.name[0],
                                         'artistURI': spotify_util.id2uri('artist', x.id[0]),
                                         'id': spotify_util.id2uri('artist', x.id[0]),
-                                        'thumbnail': x.portrait[0].id[0]
+                                        'thumbnail': spotify_util.id2uri('image', x.portrait[0].id[0])
                                     }
                                 }),
                                 playlists: data.result.playlists[0].playlist.map(x=> {
@@ -232,6 +233,7 @@ class Spotify {
                         parser.parseString(xml);
                     });
                 })
+                    .catch(e=>console.log(e.stack))
             })
     }
 
