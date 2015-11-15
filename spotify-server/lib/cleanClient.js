@@ -37,7 +37,7 @@ class Spotify {
         return new Promise((resolve, reject)=> {
             this._getInstance()
                 .then(instance=> {
-                    return Promise.all(trackURIs.map(this._getTackCover))
+                    return Promise.all(trackURIs.map(x => this._getTackCover(x)))
                 })
                 .then(covers=> {
                     return Promise.all(
@@ -46,6 +46,7 @@ class Spotify {
                                 this._instance.get([trackURI], (err, song)=> {
                                     if (err) debugger
                                     return resolve({
+                                        "id": trackURI,
                                         "name": song.name,
                                         "artist": song.artist.map(x=>x.name).join(", "),
                                         "album": song.album.name,
@@ -59,6 +60,9 @@ class Spotify {
                 })
                 .then(songs=> {
                     resolve(songs.sort((a, b)=> a.name > b.name));
+                })
+                .catch(e=> {
+                    console.log(e.stack)
                 })
         });
     }
@@ -170,7 +174,7 @@ class Spotify {
     }
 
     getTracksForPlaylist(playlistURI) {
-        const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0]._tracksURI;
+        const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0].tracks;
         return this._getTacksInfo(tracksURIs)
     }
 
@@ -183,7 +187,9 @@ class Spotify {
                         console.log(err);
                         var parser = new xml2js.Parser();
                         parser.on('end', function (data) {
-
+                            const result = {
+                                albums: data
+                            }
                             debugger
                         });
                         parser.parseString(xml);
