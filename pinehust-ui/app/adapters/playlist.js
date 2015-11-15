@@ -18,16 +18,16 @@ export default ApplicationAdapter.extend({
 
   },
 
-  handleResponse: function(status, header, payload) {
-    this._super(status, header, payload);
-    if (!payload && !payload.playlists) {
-      return undefined;
-    }
-
-    payload.playlists.forEach(function (playlist) {
-      playlist.id = playlist.playlistURI;
-      playlist.name = playlist.attributes.name;
-    });
-    return payload;
-  }
+  // handleResponse: function(status, header, payload) {
+  //   this._super(status, header, payload);
+  //   if (!payload && !payload.playlists) {
+  //     return undefined;
+  //   }
+  //
+  //   payload.playlists.forEach(function (playlist) {
+  //     playlist.id = playlist.playlistURI;
+  //     playlist.name = playlist.attributes.name;
+  //   });
+  //   return payload;
+  // }
 });

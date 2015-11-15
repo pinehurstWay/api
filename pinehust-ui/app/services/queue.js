@@ -41,6 +41,7 @@ export default Ember.Service.extend({
       error: function (err) {
       }
     });
+  },
 
   clickTrackFromSearch: function (searchedTrack) {
     var musicIndex = this.get('playingMusicIndex');
