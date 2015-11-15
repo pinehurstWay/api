@@ -53,9 +53,6 @@ app.get('/', function (req, res) {
 //Retrieve PlayLists
 app.get('/spotify-server/playlists', function (req, res) {
     let playlists;
-    //spotifyClientInstance.search("who knows").then(x=>{
-    //    debugger
-    //})
     spotifyClientInstance.getPlayLists()
         .then(playlistsTemp=> {
             playlists = playlistsTemp;
@@ -124,14 +121,10 @@ app.get('/spotify-server/track', function (req, res) {
 
 //Search (tracks only right now)
 app.get('/spotify-server/search/:query', function (req, res) {
-    var query = req.params.query;
-    spotifyClient.newInstance(req.session.username, req.session.password).search(query)
-        .on('searchResultsReady', function (data) {
-            res.send(data);
-        })
-        .on('searchResultsError', function (e) {
-            res.send({error: 'searchResultsError'});
-        })
+    const query = req.params.query;
+    spotifyClientInstance.search(query)
+        .then(res.send)
+    .catch(e=>console.log(e.stack));
 });
 
 //Play a track

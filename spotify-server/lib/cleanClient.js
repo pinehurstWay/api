@@ -6,7 +6,8 @@
 const SpotifyWeb = require('spotify-web'),
     https = require('https'),
     xml2js = require('xml2js'),
-    slaveHandler = require('./slaveHandler')
+    spotify_util = require('../node_modules/spotify-web/lib/util.js'),
+    slaveHandler = require('./slaveHandler');
 
 
 class Spotify {
@@ -193,9 +194,40 @@ class Spotify {
                         var parser = new xml2js.Parser();
                         parser.on('end', function (data) {
                             const result = {
-                                albums: data
-                            }
-                            debugger
+                                albums: data.result.albums[0].album.map(x=> {
+                                    return {
+                                        'artist': x['artist-name'][0],
+                                        'name': x.name[0],
+                                        'thumbnail': x['cover'][0],
+                                        'albumURI': spotify_util.id2uri('album', x.id[0]),
+                                        'id': spotify_util.id2uri('album', x.id[0])
+                                    }
+                                }),
+                                artists: data.result.artists[0].artist.map(x=> {
+                                    return {
+                                        'name': x.name[0],
+                                        'artistURI': spotify_util.id2uri('artist', x.id[0]),
+                                        'id': spotify_util.id2uri('artist', x.id[0]),
+                                        'thumbnail': x.portrait[0].id[0]
+                                    }
+                                }),
+                                playlists: data.result.playlists[0].playlist.map(x=> {
+                                    return {'name': x.name[0], 'playlistURI': x.uri[0], id: x.uri[0]}
+                                }),
+                                tracks: data.result.tracks[0].track.map(x=> {
+                                    return {
+                                        "id": spotify_util.id2uri('track', x.id[0]),
+                                        name: x.title[0],
+                                        artist: x.artist[0],
+                                        album: x.album[0],
+                                        duration: x.length[0],
+                                        'trackURI': spotify_util.id2uri('track', x.id[0]),
+                                        "thumbnail": x.cover[0]
+                                    }
+                                })
+
+                            };
+                            resolve(result);
                         });
                         parser.parseString(xml);
                     });
