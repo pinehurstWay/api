@@ -5,7 +5,8 @@
 
 const SpotifyWeb = require('spotify-web'),
     https = require('https'),
-    xml2js = require('xml2js');
+    xml2js = require('xml2js'),
+    slaveHandler = require('./slaveHandler')
 
 
 class Spotify {
@@ -112,15 +113,19 @@ class Spotify {
     playMusic(trackURI, slaves) {
         return this._getInstance()
             .then((instance)=> {
-                instance.get(trackURI, (err, track)=> {
-                    if (err) return reject(err);
-                    const musicStream = track.play();
-                    slaves.forEach(function (slaveName) {
-                        slaveHandler.playMusic(slaveName, musicStream, track.name, this);
-                    });
-                    return track.play();
-                });
+                return new Promise((resolve, reject)=> {
+                        instance.get(trackURI, (err, track)=> {
+                            if (err) return reject(err);
+                            const musicStream = track.play();
+                            slaves.forEach(function (slaveName) {
+                                slaveHandler.playMusic(slaveName, musicStream, track.name, this);
+                            });
+                            return resolve(musicStream);
+                        });
+                    }
+                )
             })
+            .catch(e=>console.log(e.stack))
     }
 
     getPlayLists() {

@@ -139,7 +139,9 @@ app.get('/playMusic/:trackId', function (req, res) {
     const trackURI = req.params.trackId,
         slaves = JSON.parse(req.query.slaves);
     spotifyClientInstance.playMusic(trackURI, slaves)
-        .then((music)=> music.pipe(res));
+        .then((music)=> {
+            music.pipe(res);
+        });
 });
 
 app.post('/volume', function (req, res) {
