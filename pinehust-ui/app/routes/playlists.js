@@ -9,12 +9,12 @@ export default Ember.Route.extend({
     });
   },
   afterModel: function (model) {
-    var firstPlaylistId = model.playlists.get('firstObject').get('playlistURI').split(':')[4];
+    var firstPlaylistId = model.playlists.get('firstObject').get('playlistURI');
     var firstPlaylistTracks = this.get('store').query('track', {
       uri: firstPlaylistId,
-      searchType: 'playlist'
     });
     model.selectedPlaylist = model.playlists.get('firstObject').get('id');
+    debugger
     model.listTracks = firstPlaylistTracks;
   },
 
