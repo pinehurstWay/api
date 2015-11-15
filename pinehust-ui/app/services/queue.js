@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Service.extend({
   audio_player: Ember.inject.service(),
+  store: Ember.inject.service(),
   queue: [],
 
   playingMusicIndex: function () {
@@ -25,11 +26,9 @@ export default Ember.Service.extend({
 
   clickTrack: function (track) {
     this.get('audio_player').clickTrack(track);
-    this.refreshQueue();
   },
 
   addMusicToSlaves: function (track) {
-debugger
     Ember.$.ajax({
       url: '/addMusicToSlaves',
       type: 'POST',
@@ -42,6 +41,18 @@ debugger
       error: function (err) {
       }
     });
+
+  clickTrackFromSearch: function (searchedTrack) {
+    var musicIndex = this.get('playingMusicIndex');
+    var newQueue = [];
+    this.get('queue').forEach(function(track, index) {
+      newQueue.pushObject(track);
+      if (index == this.get('playingMusicIndex')) {
+        newQueue.pushObject(searchedTrack);
+      }
+    }.bind(this));
+    this.set('queue', newQueue);
+    this.get('audio_player').clickTrackFromSearch(searchedTrack);
   },
 
 
