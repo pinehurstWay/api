@@ -2,33 +2,51 @@
   <img src="/img/loading.gif" alt="Loading..." width="80" height="80" />
 {{else}}
 
-  <div>
-    <h3>ARTIST</h3>
+<div>
+  <h3>ARTISTS<small style="float:right;" {{action 'toggleView' 'artistsVisible'}}>
+    {{#if artistsVisible}}VIEW LESS{{else}}VIEW ALL{{/if}}
+  </small></h3>
+    <div class="search-block {{if artistsVisible 'full' 'compact'}}">
     {{#each listSearchArtistsResultsDisplayed as |artist|}}
-      <div>
         {{search-artist-item model=artist}}
-      </div>
     {{else}}
       <h3>No result found</h3>
     {{/each}}
   </div>
-  <div style="clear:both"></div>
-  <div>
-    <h3>ALBUM</h3>
+</div>
+<div style="clear:both"></div>
+<div>
+  <h3>ALBUMS<small style="float:right;" {{action 'toggleView' 'albumsVisible'}}>
+    {{#if albumsVisible}}VIEW LESS{{else}}VIEW ALL{{/if}}
+  </small></h3>
+    <div class="search-block {{if albumsVisible 'full' 'compact'}}">
     {{#each listSearchAlbumsResultsDisplayed as |album|}}
       {{search-album-item model=album}}
     {{else}}
       <h3>No result found</h3>
     {{/each}}
-  </div>
-  <div style="clear:both"></div>
+    </div>
+</div>
+<div style="clear:both"></div>
 
-  <div>
-    <h3>TRACK</h3>
-    {{#each listSearchTacksResultsDisplayed as |track|}}
-      {{search-item model=track}}
-    {{else}}
-      <h3>No result found</h3>
-    {{/each}}
-  </div>
+<div>
+  <h3>TRACKS</h3>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th></th>
+              <th>#</th>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Album</th>
+              <th>Duration</th>
+          </tr>
+      </thead>
+      <tbody>
+        {{#each listSearchTacksResultsDisplayed as |track|}}
+            {{search-item model=track}}
+        {{/each}}
+      </tbody>
+  </table>
+</div>
 {{/if}}

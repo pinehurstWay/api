@@ -2,7 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   tagName: '',
-  search: Ember.inject.service(),
+  queue: Ember.inject.service(),
+  audio_player: Ember.inject.service(),
 
   init: function () {
     this._super();
@@ -10,7 +11,7 @@ export default Ember.Component.extend({
 
   actions: {
     click: function (track) {
-      this.get('search').findTrack(track);
+      this.get('queue').clickTrackFromSearch(track);
     }
   }
 });

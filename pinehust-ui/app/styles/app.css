@@ -35,3 +35,30 @@
 #wrapper #page-wrapper {
   padding: 0;
 }
+
+.search-block {
+  overflow-y: hidden;
+  height: 512px;
+  max-height: 512px;
+  -webkit-transition-property: all;
+  -webkit-transition-duration: .5s;
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -moz-transition-property: all;
+  -moz-transition-duration: .5s;
+  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -ms-transition-property: all;
+  -ms-transition-duration: .5s;
+  -ms-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.search-block.full {
+  max-height: 512px;
+  overflow-y: scroll;
+}
+
+.search-block.compact {
+  max-height: 168px;
+}

@@ -1,4 +1,20 @@
-<div {{action "click"  model}} style="float: left;margin: 11px;width: 180px;height: 222px;overflow: hidden;border: 1px solid silver;border-radius: 15px;">
-  <img src="{{model.thumbnail}}" alt="album-art" width=180 height=180 />
-  <p style="padding: 4px 10px 0;font-size:12px;">{{model.name}}</p>
-</div>
+<tr {{action 'click' model}} class="">
+  <td>
+    {{#if model.isActive}}
+      {{#if audio_player.isPlaying}}
+        <i class="fa fa-play fa-fw"></i>
+      {{else if audio_player.isPaused}}
+        <i class="fa fa-pause fa-fw"></i>
+      {{else if audio_player.isStopped}}
+        <i class="fa fa-stop fa-fw"></i>
+      {{/if}}
+    {{/if}}
+  </td>
+  <td>
+    <img src="{{model.thumbnail}}" alt="logo" width=35 height=35/>
+  </td>
+  <td>{{model.name}}</td>
+  <td>{{model.artist}}</td>
+  <td>{{model.album}}</td>
+  <td>{{model.durationFormated}}</td>
+</tr>

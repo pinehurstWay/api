@@ -66,7 +66,7 @@ export default Ember.Service.extend({
         this.set('listSearchTacksResults', []);
         var artistList = this.get('store').all('artist');
         var albumList = this.get('store').all('album');
-        // var trackList = this.get('store').all('track');
+        var trackList = this.get('store').all('track');
 
 
         if (data.artists) {
@@ -92,11 +92,13 @@ export default Ember.Service.extend({
 
         if (data.tracks) {
           data.tracks.forEach(function (track) {
-            // var trackSearch = trackList.findBy('id', track.id);
-            // if (!trackSearch) {
-            //    trackSearch = this.get('store').createRecord('track', track);
-            // }
-            this.get('listSearchTacksResults').pushObject(track);
+            var trackSearch = trackList.findBy('id', track.id);
+            if (!trackSearch) {
+              //TODO: check that!
+              this.get('store').recordForId('track', track.id).unloadRecord();
+              trackSearch = this.get('store').createRecord('track', track);
+            }
+            this.get('listSearchTacksResults').pushObject(trackSearch);
           }.bind(this));
         }
       }.bind(this),
