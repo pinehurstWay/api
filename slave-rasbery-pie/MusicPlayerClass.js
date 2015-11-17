@@ -64,7 +64,7 @@ class MusicPlayer {
 
     setVolume(volume) {
         this.volumeValue = volume;
-        const osVolume = (volume * 100) / 2 + 50;
+        const osVolume = (volume * 100) / 3 + 66;
         spawn('sudo', ['amixer', 'set', 'PCM', '--', `${osVolume}%`]);
 
         this.volume.setVolume(this.volumeValue);
