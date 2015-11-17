@@ -205,12 +205,13 @@ class Spotify {
                                     }
                                 }),
                                 artists: data.result.artists[0].artist.map(x=> {
-                                    if (!x.portrait) x.portrait = [{id: [null]}];
+                                    if (!x.portrait) x.portrait = null;
+                                    else x.portrait = spotify_util.id2uri('image', x.portrait[0].id[0]);
                                     return {
                                         'name': x.name[0],
                                         'artistURI': spotify_util.id2uri('artist', x.id[0]),
                                         'id': spotify_util.id2uri('artist', x.id[0]),
-                                        'thumbnail': spotify_util.id2uri('image', x.portrait[0].id[0])
+                                        'thumbnail': x.portrait
                                     }
                                 }),
                                 playlists: data.result.playlists[0].playlist.map(x=> {

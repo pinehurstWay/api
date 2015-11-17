@@ -10,5 +10,6 @@ export default DS.Model.extend({
   plurials: function () {
     return this.get('length') > 1;
   }.property('length'),
-  isActive: DS.attr('boolean', {defaultValue: false})
+  isActive: DS.attr('boolean', {defaultValue: false}),
+  isOwner: DS.attr('boolean', {defaultValue: false})
 });

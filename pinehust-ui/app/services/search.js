@@ -15,17 +15,17 @@ export default Ember.Service.extend({
     return this.get('listSearchPlaylistsResults');
   }.property('listSearchPlaylistsResults'),
 
-listSearchArtistsResultsDisplayed: function () {
-  return this.get('listSearchArtistsResults');
-}.property('listSearchArtistsResults'),
+  listSearchArtistsResultsDisplayed: function () {
+    return this.get('listSearchArtistsResults');
+  }.property('listSearchArtistsResults'),
 
-listSearchAlbumsResultsDisplayed: function () {
-  return this.get('listSearchAlbumsResults');
-}.property('listSearchAlbumsResults'),
+  listSearchAlbumsResultsDisplayed: function () {
+    return this.get('listSearchAlbumsResults');
+  }.property('listSearchAlbumsResults'),
 
-listSearchTacksResultsDisplayed: function () {
-  return this.get('listSearchTacksResults');
-}.property('listSearchTacksResults'),
+  listSearchTacksResultsDisplayed: function () {
+    return this.get('listSearchTacksResults');
+  }.property('listSearchTacksResults'),
 
 
   findTrack: function (track) {
@@ -87,21 +87,21 @@ listSearchTacksResultsDisplayed: function () {
           data.playlists.forEach(function (playlist) {
             var playlistSearch = this.get('store').createRecord('playlist', playlist);
             this.get('listSearchPlaylistsResults').pushObject(playlistSearch);
-          });
+          }.bind(this));
         }
 
         if (data.artists) {
           data.artists.forEach(function (artist) {
             var artistSearch = this.get('store').createRecord('artist', artist);
             this.get('listSearchArtistsResults').pushObject(artistSearch);
-          });
+          }.bind(this));
         }
 
         if (data.albums) {
           data.albums.forEach(function (album) {
             var albumSearch = this.get('store').createRecord('album', album);
             this.get('listSearchAlbumsResults').pushObject(albumSearch);
-          });
+          }.bind(this));
         }
 
 
@@ -109,7 +109,7 @@ listSearchTacksResultsDisplayed: function () {
           data.tracks.forEach(function (track) {
             var trackSearch = this.get('store').createRecord('track', track);
             this.get('listSearchTacksResults').pushObject(trackSearch);
-          });
+          }.bind(this));
         }
       }.bind(this),
       error: function (err) {

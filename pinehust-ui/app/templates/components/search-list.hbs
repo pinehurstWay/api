@@ -6,35 +6,28 @@
     <h3>No result found</h3>
   {{/each}} --}}
 
-
+playlist
   {{#each search.listSearchPlaylistsResultsDisplayed as |playlist|}}
     {{playlist.name}}
   {{else}}
     <h3>No result found</h3>
   {{/each}}
-
+<p>artist</p>
   {{#each search.listSearchArtistsResultsDisplayed as |artist|}}
     {{artist.name}}
   {{else}}
     <h3>No result found</h3>
   {{/each}}
-
+<p>album</p>
   {{#each search.listSearchAlbumsResultsDisplayed as |album|}}
     {{album.name}}
   {{else}}
     <h3>No result found</h3>
   {{/each}}
-
+<p>track</p>
   {{#each search.listSearchTacksResultsDisplayed as |track|}}
     {{search-item model=track}}
   {{else}}
     <h3>No result found</h3>
   {{/each}}
-
-
-
-
-
-
-
 {{/if}}
