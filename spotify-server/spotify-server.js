@@ -123,10 +123,10 @@ app.get('/spotify-server/track', function (req, res) {
 app.get('/spotify-server/search/:query', function (req, res) {
     const query = req.params.query;
     spotifyClientInstance.search(query)
-        .then(result=>{
+        .then(result=> {
             res.send(result)
         })
-    .catch(e=>console.log(e.stack));
+        .catch(e=>console.log(e.stack));
 });
 
 //Play a track
@@ -140,24 +140,21 @@ app.get('/playMusic/:trackId', function (req, res) {
 });
 
 app.post('/volume', function (req, res) {
-    var slaves = req.body.slave;
-    spotifyClient.setVolume(slaves, function () {
-        res.send({"success": true})
-    });
+    const slaves = req.body.slave;
+    spotifyClientInstance.setVolume(slaves)
+        .then(()=> res.send({"success": true}));
 });
 
 app.post('/pause', function (req, res) {
-    var slaves = req.body.slave;
-    spotifyClient.pause(slaves, function () {
-        res.send({"success": true})
-    });
+    const slaves = req.body.slave;
+    spotifyClientInstance.pause(slaves)
+        .then(()=> res.send({"success": true}));
 });
 
 app.post('/resume', function (req, res) {
-    var slaves = req.body.slave;
-    spotifyClient.resume(slaves, function () {
-        res.send({"success": true});
-    })
+    const slaves = req.body.slave;
+    spotifyClientInstance.resume(slaves)
+        .then(()=> res.send({"success": true}));
 });
 
 app.get('/slaves', function (req, res) {

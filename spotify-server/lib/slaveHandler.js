@@ -46,11 +46,13 @@ exports.playMusic = function (slaveName, musicStream, musicName, spotifyClient) 
     slaves[slaveName].status = "PLAYING";
 };
 
-exports.setVolume = function (slaveName, volume, next) {
-    var ip = slaves[slaveName].ip;
-    request.get("http://" + ip + ":9000/volume/" + volume, function () {
-        next();
-    });
+exports.setVolume = function (slaveName, volume) {
+    return new Promise((resolve,reject)=>{
+        const ip = slaves[slaveName].ip;
+        request.get("http://" + ip + ":9000/volume/" + volume, function () {
+            resolve();
+        });
+    })
 };
 
 exports.pause = function (slaveName, next) {

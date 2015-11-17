@@ -154,6 +154,7 @@ class Spotify {
                                         "playlistURI": playlist.uri,
                                         "length": playlistInfo.length,
                                         "tracks": playlistInfo.contents.items.map(x=>x.uri),
+                                        'isOwner': true,
                                         "_tracks": null
                                     };
                                     resolve(playlistResult)
@@ -235,6 +236,21 @@ class Spotify {
                 })
                     .catch(e=>console.log(e.stack))
             })
+    }
+
+
+    setVolume(slaves) {
+        return Promise.all(slaves.map(slave=>slaveHandler.setVolume(slave.name, slave.volume)));
+    }
+
+    pause(slaves) {
+        return Promise.all(slaves.map(slave=>slaveHandler.pause(slave.name, slave.volume)));
+
+    }
+
+    resume(slaves) {
+        return Promise.all(slaves.map(slave=>slaveHandler.resume(slave.name, slave.volume)));
+
     }
 
 }
