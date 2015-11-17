@@ -24,16 +24,17 @@ class MusicPlayer {
         this.volume.setVolume(this.volumeValue);
     }
 
-    playStream(next) {
-        this.STATE = "PLAYING";
-        this.stream = this.source.pipe(this.throttle).pipe(new Lame.Decoder)
-            .on("format", (format)=> {
-                this.stream.pipe(this.volume).pipe(this.speaker);
-                this.volume.setVolume(this.volumeValue);
-            });
-        this.stream.on('end', function () {
-            next()
+    playStream() {
+        return new Promise((resolve, reject)=> {
+            this.STATE = "PLAYING";
+            this.stream = this.source.pipe(this.throttle).pipe(new Lame.Decoder)
+                .on("format", (format)=> {
+                    this.stream.pipe(this.volume).pipe(this.speaker);
+                    this.volume.setVolume(this.volumeValue);
+                });
+            this.stream.on('end', resolve);
         })
+
     }
 
     pause() {

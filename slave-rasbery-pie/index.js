@@ -6,25 +6,25 @@ app.set('port', process.env.PORT || 9000);
 var server = http.createServer(app);
 
 
-server.on('connection', function(socket) {
+server.on('connection', function (socket) {
     console.log("A new connection was made by a client.");
     socket.setTimeout(5000 * 1000);
     // 30 second timeout. Change this as you see fit.
 });
 
 
-
 var MusicPlayer = require("./MusicPlayerClass");
 
 
-var stream;
+let stream;
 app.all('/music', function (req, res) {
     if (stream && stream.STATE == "PLAYING")stream.stop();
     stream = new MusicPlayer.Class(req);
-    stream.playStream(function(){
-        res.set({'MusicOver': 'true'});
-        res.send()
-    })
+    stream.playStream()
+        .then(()=> {
+            res.set({'MusicOver': 'true'});
+            res.send()
+        })
 });
 
 
