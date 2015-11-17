@@ -3,10 +3,11 @@
  */
 'use strict';
 
-var Speaker = require('speaker'),
+const Speaker = require('speaker'),
     Volume = require("pcm-volume"),
     Lame = require('lame'),
-    Throttle = require('throttle');
+    Throttle = require('throttle'),
+    spawn = require('child_process').spawn;
 
 var BIT_RATE = 160000;
 
@@ -18,7 +19,9 @@ class MusicPlayer {
         this.speaker = new Speaker();
         this.throttle = new Throttle(BIT_RATE / 8);
         this.volume = new Volume();
+        this.volumeValue = 0.5;
         this.stream = null;
+        this.volume.setVolume(this.volumeValue);
     }
 
     playStream(next) {
@@ -26,8 +29,9 @@ class MusicPlayer {
         this.stream = this.source.pipe(this.throttle).pipe(new Lame.Decoder)
             .on("format", (format)=> {
                 this.stream.pipe(this.volume).pipe(this.speaker);
+                this.volume.setVolume(this.volumeValue);
             });
-        this.stream.on('end',function(){
+        this.stream.on('end', function () {
             next()
         })
     }
@@ -44,6 +48,7 @@ class MusicPlayer {
     resume() {
         if (this.STATE == "PAUSED") {
             this.stream.pipe(this.volume).pipe(this.speaker);
+            this.volume.setVolume(this.volumeValue);
             this.STATE = "PLAYING";
         }
     }
@@ -58,7 +63,11 @@ class MusicPlayer {
     }
 
     setVolume(volume) {
-        this.volume.setVolume(volume);
+        this.volumeValue = volume;
+        const osVolume = (volume * 100) / 2 + 50;
+        spawn('sudo', ['amixer', 'set', 'PCM', '--', `${osVolume}%`]);
+
+        this.volume.setVolume(this.volumeValue);
     }
 }
 
