@@ -5,28 +5,10 @@ export default Ember.Service.extend({
   queue: Ember.inject.service(),
   listSearchResults: [],
   search: '',
-  listSearchPlaylistsResults: [],
   listSearchArtistsResults: [],
   listSearchAlbumsResults: [],
   listSearchTacksResults: [],
   isLoading: false,
-
-  listSearchPlaylistsResultsDisplayed: function () {
-    return this.get('listSearchPlaylistsResults');
-  }.property('listSearchPlaylistsResults'),
-
-  listSearchArtistsResultsDisplayed: function () {
-    return this.get('listSearchArtistsResults');
-  }.property('listSearchArtistsResults'),
-
-  listSearchAlbumsResultsDisplayed: function () {
-    return this.get('listSearchAlbumsResults');
-  }.property('listSearchAlbumsResults'),
-
-  listSearchTacksResultsDisplayed: function () {
-    return this.get('listSearchTacksResults');
-  }.property('listSearchTacksResults'),
-
 
   findTrack: function (track) {
     Ember.$.ajax({
@@ -78,28 +60,31 @@ export default Ember.Service.extend({
         if (!data) {
           return;
         }
-        this.set('listSearchPlaylistsResults', []);
+
         this.set('listSearchArtistsResults', []);
         this.set('listSearchAlbumsResults', []);
         this.set('listSearchTacksResults', []);
+        var artistList = this.get('store').all('artist');
+        var albumList = this.get('store').all('album');
+        // var trackList = this.get('store').all('track');
 
-        if (data.playlists) {
-          data.playlists.forEach(function (playlist) {
-            var playlistSearch = this.get('store').createRecord('playlist', playlist);
-            this.get('listSearchPlaylistsResults').pushObject(playlistSearch);
-          }.bind(this));
-        }
 
         if (data.artists) {
           data.artists.forEach(function (artist) {
-            var artistSearch = this.get('store').createRecord('artist', artist);
+            var artistSearch = artistList.findBy('id', artist.id);
+            if (!artistSearch) {
+               artistSearch = this.get('store').createRecord('artist', artist);
+            }
             this.get('listSearchArtistsResults').pushObject(artistSearch);
           }.bind(this));
         }
 
         if (data.albums) {
           data.albums.forEach(function (album) {
-            var albumSearch = this.get('store').createRecord('album', album);
+            var albumSearch = albumList.findBy('id', album.id);
+            if (!albumSearch) {
+               albumSearch = this.get('store').createRecord('album', album);
+            }
             this.get('listSearchAlbumsResults').pushObject(albumSearch);
           }.bind(this));
         }
@@ -107,8 +92,11 @@ export default Ember.Service.extend({
 
         if (data.tracks) {
           data.tracks.forEach(function (track) {
-            var trackSearch = this.get('store').createRecord('track', track);
-            this.get('listSearchTacksResults').pushObject(trackSearch);
+            // var trackSearch = trackList.findBy('id', track.id);
+            // if (!trackSearch) {
+            //    trackSearch = this.get('store').createRecord('track', track);
+            // }
+            this.get('listSearchTacksResults').pushObject(track);
           }.bind(this));
         }
       }.bind(this),

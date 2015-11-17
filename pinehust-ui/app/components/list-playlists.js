@@ -8,7 +8,7 @@ export default Ember.Component.extend({
     this.get('listPlaylists').forEach(function (playlist) {
         playlist.set('isActive', playlist.id === this.get('selectedPlaylist'));
     }.bind(this));
-    return this.get('listPlaylists').filter('isOwner', true);
+    return this.get('listPlaylists').filterBy('isOwner', true);
   }.property('listPlaylists.@each,selectedPlaylist'),
 
 

@@ -199,14 +199,14 @@ class Spotify {
                                     return {
                                         'artist': x['artist-name'][0],
                                         'name': x.name[0],
-                                        'thumbnail': spotify_util.id2uri('cover', x['cover'][0]),
+                                        'thumbnail': 'https://d3rt1990lpmkn.cloudfront.net/cover/' + x['cover'][0],
                                         'albumURI': spotify_util.id2uri('album', x.id[0]),
                                         'id': spotify_util.id2uri('album', x.id[0])
                                     }
                                 }),
                                 artists: data.result.artists[0].artist.map(x=> {
                                     if (!x.portrait) x.portrait = null;
-                                    else x.portrait = spotify_util.id2uri('image', x.portrait[0].id[0]);
+                                    else x.portrait = 'https://i.scdn.co/image/' + x.portrait[0].id[0];
                                     return {
                                         'name': x.name[0],
                                         'artistURI': spotify_util.id2uri('artist', x.id[0]),
@@ -225,7 +225,7 @@ class Spotify {
                                         album: x.album[0],
                                         duration: x.length[0],
                                         'trackURI': spotify_util.id2uri('track', x.id[0]),
-                                        "thumbnail": x.cover[0]
+                                        "thumbnail": 'https://d3rt1990lpmkn.cloudfront.net/cover/' + x.cover[0]
                                     }
                                 })
 
