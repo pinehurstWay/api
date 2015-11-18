@@ -62,7 +62,7 @@ app.get('/spotify-server/playlists', function (req, res) {
             if (playlist0Tracks) {
                 playlists[0].tracks = playlist0Tracks
             }
-            //res.send({playlists: playlists})
+            res.send({playlists: playlists})
         })
         .catch(e=> {
             console.log(e.stack)
@@ -81,42 +81,16 @@ app.get('/spotify-server/track', function (req, res) {
         })
 });
 
-//Retrieve a single track
-//app.get('/spotify-server/track', function (req, res) {
-//    var uri = req.query.uri;
-//
-//    if (req.query.searchType === 'playlist') {
-//        uri = 'spotify:user:' + req.session.username + ':playlist:' + uri;
-//        spotifyClient.newInstance(req.session.username, req.session.password).getTracksByPlayListURI(uri)
-//            .on('tracksReady', function (tracks) {
-//                res.send({tracks: tracks});
-//            })
-//            .on('error', function (err) {
-//                res.send({error: err});
-//            });
-//    } else {
-//        spotifyClient.newInstance(req.session.username, req.session.password).getTrackByTrackURI(uri)
-//            .on('trackReady', function (track) {
-//                res.send(track);
-//            })
-//            .on('error', function (err) {
-//                res.send({error: err});
-//            });
-//    }
-//});
-
-//Retreive album art for a given track
-//app.get('/spotify-server/album-art/:trackURI', function (req, res) {
-//    var trackURI = req.params.trackURI;
-//
-//    spotifyClient.newInstance(req.session.username, req.session.password).getAlbumArtByTrackURI(trackURI)
-//        .on('albumArtReady' + trackURI, function (data) {
-//            res.send(data);
-//        })
-//        .on('error', function (err) {
-//            res.send({error: err});
-//        });
-//});
+app.get('/spotify-server/album', function (req, res) {
+    const albumURI = req.query.uri;
+    spotifyClientInstance.getAlbumTracks(albumURI)
+        .then(tracks=> {
+            res.send({tracks: tracks})
+        })
+        .catch(e=> {
+            console.log(e.stack)
+        })
+});
 
 //Search (tracks only right now)
 app.get('/spotify-server/search/:query', function (req, res) {
@@ -160,13 +134,17 @@ app.get('/slaves', function (req, res) {
     res.send(slaves)
 });
 
-app.post('/addMusicToSlaves', function (req, res) {
-    var track = req.body.track;
-    var parsedSlaves = req.body.items;
-    parsedSlaves.forEach(function (slave) {
-        slaves[slave.name].queue.push(track);
+app.post('/addMusicToSlaves', (req, res) => {
+    const trackURI = req.body.track.trackURI;
+    const parsedSlaves = req.body.slave;
+    const slavesToPlay = [];
+    parsedSlaves.forEach(slave => {
+        if (slaves[slave].status !== "PLAYING" && slaves[slave].queue == 0)slavesToPlay.push(slave);
+        else slaves[slave].queue.push(trackURI);
     });
-    res.send({success: true});
+    spotifyClientInstance.playMusic(trackURI, slavesToPlay)
+        .then(()=> res.send({success: true}));
+
 });
 
 var server = http.createServer(app);

@@ -31,7 +31,7 @@ export default Ember.Service.extend({
       type: 'POST',
       cache: false,
       dataType: 'json',
-      data: {track: track, slave: ['ptipy']},
+      data: {track: track.toJSON(), slave: ['Ptipy']},
       success: function (result) {
         debugger;
       }.bind(this),
@@ -43,7 +43,7 @@ export default Ember.Service.extend({
   clickTrackFromSearch: function (searchedTrack) {
     var musicIndex = this.get('playingMusicIndex');
     var newQueue = [];
-    this.get('queue').forEach(function(track, index) {
+    this.get('queue').forEach(function (track, index) {
       newQueue.pushObject(track);
       if (index == this.get('playingMusicIndex')) {
         newQueue.pushObject(searchedTrack);

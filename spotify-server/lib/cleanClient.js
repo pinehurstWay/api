@@ -118,7 +118,7 @@ class Spotify {
                         instance.get(trackURI, (err, track)=> {
                             if (err) return reject(err);
                             const musicStream = track.play();
-                            slaves.forEach(function (slaveName) {
+                            slaves.forEach(slaveName => {
                                 slaveHandler.playMusic(slaveName, musicStream, track.name, this);
                             });
                             return resolve(musicStream);
@@ -178,7 +178,7 @@ class Spotify {
                 console.log(e.stack)
             });
 
-}
+    }
 
     getTracksForPlaylist(playlistURI) {
         const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0].tracks;
@@ -212,9 +212,9 @@ class Spotify {
                                 });
                             }
 
-                            if (data.result.artists || data.result.artists[0].artist) {
+                            if (data.result.artists && data.result.artists[0].artist) {
                                 result.artists = data.result.artists[0].artist.map(x => {
-                                    if (!x.portrait || !x.portrait[0] || !x.portrait[0].id || !x.portrait[0].id[0]) {
+                                    if (x.portrait && x.portrait[0] && x.portrait[0].id && x.portrait[0].id[0]) {
                                         x.portrait = '/img/no-artist.png';
                                     } else {
                                         x.portrait = 'https://i.scdn.co/image/' + x.portrait[0].id[0];
@@ -227,12 +227,9 @@ class Spotify {
                                     }
                                 });
                             }
-                            //playlists: data.result.playlists[0].playlist.map(x=> {
-                            //    return {'name': x.name[0], 'playlistURI': x.uri[0], id: x.uri[0]}
-                            //}),
                             if (data.result.tracks && data.result.tracks[0].track) {
                                 result.tracks = data.result.tracks[0].track.map(x => {
-                                    if (!x['cover'] || !x['cover'][0]) {
+                                    if (!x['cover'] || x['cover'][0]) {
                                         x.cover = '/img/no-artist.png';
                                     } else {
                                         x.cover = 'https://d3rt1990lpmkn.cloudfront.net/cover/' + x['cover'][0];
