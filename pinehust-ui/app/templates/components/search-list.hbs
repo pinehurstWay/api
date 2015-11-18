@@ -6,7 +6,7 @@
   <h3>ARTISTS<small style="float:right;" {{action 'toggleView' 'artistsVisible'}}>
     {{#if artistsVisible}}VIEW LESS{{else}}VIEW ALL{{/if}}
   </small></h3>
-    <div class="search-block {{if artistsVisible 'full' 'compact'}}">
+    <div class="search-block {{artistClass}}">
     {{#each listSearchArtistsResultsDisplayed as |artist|}}
         {{search-artist-item model=artist}}
     {{else}}
@@ -19,7 +19,7 @@
   <h3>ALBUMS<small style="float:right;" {{action 'toggleView' 'albumsVisible'}}>
     {{#if albumsVisible}}VIEW LESS{{else}}VIEW ALL{{/if}}
   </small></h3>
-    <div class="search-block {{if albumsVisible 'full' 'compact'}}">
+    <div class="search-block {{albumClass}}">
     {{#each listSearchAlbumsResultsDisplayed as |album|}}
       {{search-album-item model=album}}
     {{else}}

@@ -38,8 +38,7 @@
 
 .search-block {
   overflow-y: hidden;
-  height: 512px;
-  max-height: 512px;
+  height: 1552px;
   -webkit-transition-property: all;
   -webkit-transition-duration: .5s;
   -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -54,9 +53,36 @@
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
-.search-block.full {
+.search-block.full1 {
+  max-height: 352px;
+}
+
+.search-block.full2 {
   max-height: 512px;
-  overflow-y: scroll;
+}
+
+.search-block.full3 {
+  max-height: 692px;
+}
+
+.search-block.full4 {
+  max-height: 862px;
+}
+
+.search-block.full5 {
+  max-height: 1042px;
+}
+
+.search-block.full6 {
+  max-height: 1212px;
+}
+
+.search-block.full7 {
+  max-height: 1382px;
+}
+
+.search-block.full8 {
+  max-height: 1552px;
 }
 
 .search-block.compact {
