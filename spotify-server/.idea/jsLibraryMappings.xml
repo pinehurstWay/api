@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/../slave-rasbery-pie" libraries="{slave-rasbery-pie node_modules}" />
     <file url="file://$PROJECT_DIR$/../slave-rasbery-pie/MusicPlayerClass.js" libraries="{ECMAScript 6, Nashorn, Node.js Globals}" />
     <file url="file://$PROJECT_DIR$" libraries="{spotify-server node_modules}" />
+    <includedPredefinedLibrary name="ECMAScript 6" />
   </component>
 </project>

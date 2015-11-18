@@ -1,16 +1,13 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  tagName: '',
   search: Ember.inject.service(),
+
+  album: function () {
+    return this.get('search').get('selectedAlbum');
+  }.property('search.selectedAlbum'),
 
   init: function () {
     this._super();
-  },
-  actions: {
-    click: function (model) {
-      debugger
-      this.get('search').set('selectedAlbum', model);
-    }
   }
 });

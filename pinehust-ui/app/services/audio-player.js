@@ -58,22 +58,22 @@ export default Ember.Service.extend({
     this.set('playerDurationPercent', durationPercent);
   },
 
-  getAlbumArt: function (track) {
-    Ember.$.ajax({
-      url: '/spotify-server/album-art/' + track.get('trackURI'),
-      crossDomain: true,
-      cache: false,
-      dataType: 'json',
-      xhrFields: {
-        withCredentials: true
-      },
-      success: function (data) {
-        track.set('thumbnail', data.oembed.thumbnail_url);
-      },
-      error: function (err) {
-      }
-    });
-  },
+  // getAlbumArt: function (track) {
+  //   Ember.$.ajax({
+  //     url: '/spotify-server/album-art/' + track.get('trackURI'),
+  //     crossDomain: true,
+  //     cache: false,
+  //     dataType: 'json',
+  //     xhrFields: {
+  //       withCredentials: true
+  //     },
+  //     success: function (data) {
+  //       track.set('thumbnail', data.oembed.thumbnail_url);
+  //     },
+  //     error: function (err) {
+  //     }
+  //   });
+  // },
 
   play: function () {
     this.get('player').play();

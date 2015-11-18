@@ -8,6 +8,7 @@ export default Ember.Service.extend({
   listSearchArtistsResults: [],
   listSearchAlbumsResults: [],
   listSearchTacksResults: [],
+  selectedAlbum: null,
   isLoading: false,
 
   findTrack: function (track) {

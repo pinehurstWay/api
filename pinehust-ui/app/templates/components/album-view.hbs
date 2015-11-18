@@ -1,0 +1,9 @@
+<img src="{{album.thumbnail}}" width=300 height=300 alt="album-art"/>
+<div>
+  <p>artist: {{album.artist}}</p>
+  <p>name: {{album.name}}</p>
+  <p>tracks: </p>
+  {{#each album.tracks as |track|}}
+    {{track-item model=track}}
+  {{/each}}
+</div>
