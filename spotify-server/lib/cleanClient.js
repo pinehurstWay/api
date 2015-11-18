@@ -178,7 +178,7 @@ class Spotify {
                 console.log(e.stack)
             });
 
-    }
+}
 
     getTracksForPlaylist(playlistURI) {
         const tracksURIs = this._playlists.filter(x=>x.playlistURI == playlistURI)[0].tracks;
