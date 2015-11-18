@@ -1,5 +1,7 @@
-  <a {{action "clickPlaylistItem" model}} class="{{if model.isActive 'active'}} list-group-item">
-    <i class="fa fa-tasks fa-fw"></i> {{model.name}}
-    <span class="pull-right text-muted small" style="background: white;border-radius: 9px;padding: 2px 8px;"><em>{{model.length}} {{#if model.plurials}}musics{{else}}music{{/if}}</em>
-    </span>
+<a {{action "clickPlaylistItem" model}} class="{{if model.isActive 'active'}} list-group-item">
+  <span class="pull-right text-muted small" style="background: white;border-radius: 9px;padding: 2px 8px;">
+    <em>{{model.length}} {{#if model.plurials}}musics{{else}}music{{/if}}</em>
+  </span>
+  <p></p>
+  <i class="fa fa-tasks fa-fw"></i> {{model.name}}
 </a>

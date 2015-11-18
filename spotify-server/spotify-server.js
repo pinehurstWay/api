@@ -92,6 +92,16 @@ app.get('/spotify-server/album', function (req, res) {
         })
 });
 
+app.get('/spotify-server/album', (req, res)=> {
+    const albumURI = req.query.uri;
+    spotifyClientInstance.getAlbumTracks(albumURI)
+        .then((tracks)=> {
+            res.send({tracks: tracks});
+        })
+        .catch(e=>console.log(e.stack));
+});
+
+
 //Search (tracks only right now)
 app.get('/spotify-server/search/:query', function (req, res) {
     const query = req.params.query;

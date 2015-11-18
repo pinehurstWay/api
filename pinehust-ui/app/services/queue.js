@@ -53,6 +53,25 @@ export default Ember.Service.extend({
     this.get('audio_player').clickTrack(searchedTrack);
   },
 
+  playAll: function (tracks) {
+    this.set('queue', tracks);
+    this.get('audio_player').clickTrack(tracks.get('firstObject'));
+  },
+
+  addToQueue: function (tracks) {
+    var newQueue = [];
+    this.get('queue').forEach(function(track) {
+      newQueue.pushObject(track);
+    });
+    if (tracks) {
+      tracks.forEach(function(track) {
+        newQueue.pushObject(track);
+      });
+    }
+    this.set('queue', newQueue);
+  },
+
+
 
   setup: function () {
 

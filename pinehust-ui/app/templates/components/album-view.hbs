@@ -1,9 +1,32 @@
-<img src="{{album.thumbnail}}" width=300 height=300 alt="album-art"/>
-<div>
-  <p>artist: {{album.artist}}</p>
-  <p>name: {{album.name}}</p>
-  <p>tracks: </p>
-  {{#each album.tracks as |track|}}
-    {{track-item model=track}}
-  {{/each}}
-</div>
+<h2 {{action 'close'}}>X</h2>
+  <div style="display: inline-block">
+    <img src="{{album.thumbnail}}" width=300 height=300 alt="album-art"/>
+  </div>
+  <div style="display: inline-block;margin-left: 30px;">
+      <p><strong>Artist:</strong> {{album.artist}}</p>
+      <p></p>
+      <p><strong>Album</strong> {{album.name}}</p>
+  </div>
+  <div>
+    <h3>TRACKS
+      <button type="button" style="float: right;margin-left: 5px;" {{action 'addToQueue' album.tracks}} class="btn btn-outline btn-default"><i class="fa fa-plus fa-fw"></i>Add to queue</button>
+      <button type="button" style="float: right;" {{action 'playAll' album.tracks}} class="btn btn-outline btn-default"><i class="fa fa-play fa-fw"></i>Play all</button>
+    </h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>#</th>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+          {{#each album.tracks as |track|}}
+            {{search-item model=track}}
+          {{/each}}
+        </tbody>
+    </table>
+  </div>

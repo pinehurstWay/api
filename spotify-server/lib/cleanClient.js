@@ -295,6 +295,7 @@ class Spotify {
                             resolve({
                                 "id": x.uri,
                                 "name": x.name,
+                                "type": "track",
                                 "artist": x.artist[0].name,
                                 "album": x.album.name,
                                 "duration": x.duration,
