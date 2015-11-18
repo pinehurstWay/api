@@ -82,42 +82,6 @@ app.get('/spotify-server/track', function (req, res) {
         })
 });
 
-//Retrieve a single track
-//app.get('/spotify-server/track', function (req, res) {
-//    var uri = req.query.uri;
-//
-//    if (req.query.searchType === 'playlist') {
-//        uri = 'spotify:user:' + req.session.username + ':playlist:' + uri;
-//        spotifyClient.newInstance(req.session.username, req.session.password).getTracksByPlayListURI(uri)
-//            .on('tracksReady', function (tracks) {
-//                res.send({tracks: tracks});
-//            })
-//            .on('error', function (err) {
-//                res.send({error: err});
-//            });
-//    } else {
-//        spotifyClient.newInstance(req.session.username, req.session.password).getTrackByTrackURI(uri)
-//            .on('trackReady', function (track) {
-//                res.send(track);
-//            })
-//            .on('error', function (err) {
-//                res.send({error: err});
-//            });
-//    }
-//});
-
-//Retreive album art for a given track
-//app.get('/spotify-server/album-art/:trackURI', function (req, res) {
-//    var trackURI = req.params.trackURI;
-//
-//    spotifyClient.newInstance(req.session.username, req.session.password).getAlbumArtByTrackURI(trackURI)
-//        .on('albumArtReady' + trackURI, function (data) {
-//            res.send(data);
-//        })
-//        .on('error', function (err) {
-//            res.send({error: err});
-//        });
-//});
 
 //Search (tracks only right now)
 app.get('/spotify-server/search/:query', function (req, res) {
