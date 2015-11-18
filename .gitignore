@@ -28,3 +28,4 @@ build/Release
 /.idea
 
 */node_modules
+.iml
