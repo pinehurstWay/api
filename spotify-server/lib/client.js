@@ -286,8 +286,8 @@ SpotifyClient.prototype.playTrackByURI = function (uri, slaves, res) {
                 .on("end", function () {
                     console.log("finish streaming music")
                 }).on("finish", function () {
-                console.log("finish2 streaming music")
-            })
+                    console.log("finish2 streaming music")
+                })
         });
     });
 };
