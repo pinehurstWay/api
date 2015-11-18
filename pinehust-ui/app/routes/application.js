@@ -8,8 +8,7 @@ export default Ember.Route.extend({
     this._super(transition);
     document.cookie = null;
     document.cookie = 'password=zeswEG7F;';
-    document.cookie+= 'username=AdrienVinches';
-
+    document.cookie = 'username=AdrienVinches';
   },
   model: function () {
     return Ember.RSVP.hash({
