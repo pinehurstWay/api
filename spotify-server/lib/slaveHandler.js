@@ -38,8 +38,6 @@ exports.playMusic = function (slaveName, musicStream, musicName, spotifyClient) 
             if (slave.queue[0]) {
                 spotifyClient.playTrackByURI(slave.queue[0].trackURI, [slave]);
             }
-
-
             console.log("finish streaming music");
         });
     slaves[slaveName].status = "PLAYING";

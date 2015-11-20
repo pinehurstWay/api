@@ -18,6 +18,7 @@ var MusicPlayer = require("./MusicPlayerClass");
 
 let stream;
 app.all('/music', function (req, res) {
+    console.log('playing music');
     if (stream && stream.STATE == "PLAYING")stream.stop();
     stream = new MusicPlayer.Class(req);
     stream.playStream()

@@ -144,15 +144,14 @@ app.get('/slaves', function (req, res) {
     res.send(slaves)
 });
 
-app.post('/addMusicToSlaves', (req, res) => {
-    const trackURI = req.body.track.trackURI;
+app.post('/slavesPlaylist', (req, res) => {
+    const queue = req.body.track.queue;
+    const firstMusic = queue.shift();
     const parsedSlaves = req.body.slave;
-    const slavesToPlay = [];
     parsedSlaves.forEach(slave => {
-        if (slaves[slave].status !== "PLAYING" && slaves[slave].queue == 0)slavesToPlay.push(slave);
-        else slaves[slave].queue.push(trackURI);
+        slaves[slave].queue = queue
     });
-    spotifyClientInstance.playMusic(trackURI, slavesToPlay)
+    spotifyClientInstance.playMusic(trackURI, firstMusic)
         .then(()=> res.send({success: true}));
 
 });

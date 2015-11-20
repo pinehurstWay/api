@@ -3,8 +3,11 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   audio_player: Ember.inject.service(),
   store: Ember.inject.service(),
+  slave: Ember.inject.service(),
   queue: [],
-
+  slaveListActiveName: function () {
+    return this.get("slave").get("slaveList").filterBy("isActive", true).map(x=> x.get("name"));
+  }.property('slave.slaveList.@each.isActive'),
   playingMusicIndex: function () {
     return this.get('queue').indexOf(this.get('audio_player').get('playingTrack'));
   }.property('queue,audio_player.playingTrack'),
@@ -31,7 +34,7 @@ export default Ember.Service.extend({
       type: 'POST',
       cache: false,
       dataType: 'json',
-      data: {track: track.toJSON(), slave: ['Ptipy']},
+      data: {track: track.toJSON(), slave: this.get('slaveListActiveName')},
       success: function (result) {
         debugger;
       }.bind(this),
