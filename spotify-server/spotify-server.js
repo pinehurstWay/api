@@ -153,7 +153,15 @@ app.post('/slavesPlaylist', (req, res) => {
     });
     spotifyClientInstance.playMusic(trackURI, firstMusic)
         .then(()=> res.send({success: true}));
+});
 
+app.post('/updateSlavesPlaylist', (req, res) => {
+    const queue = req.body.track.queue;
+    const parsedSlaves = req.body.slave;
+    parsedSlaves.forEach(slave => {
+        slaves[slave].queue = queue
+    });
+    res.send({success: true});
 });
 
 var server = http.createServer(app);
