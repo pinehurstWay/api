@@ -215,9 +215,9 @@ class Spotify {
                             if (data.result.artists && data.result.artists[0].artist) {
                                 result.artists = data.result.artists[0].artist.map(x => {
                                     if (x.portrait && x.portrait[0] && x.portrait[0].id && x.portrait[0].id[0]) {
-                                        x.portrait = '/img/no-artist.png';
+                                    x.portrait = 'https://i.scdn.co/image/' + x.portrait[0].id[0];
                                     } else {
-                                        x.portrait = 'https://i.scdn.co/image/' + x.portrait[0].id[0];
+                                    x.portrait = '/img/no-artist.png';
                                     }
                                     return {
                                         'name': x.name[0],
