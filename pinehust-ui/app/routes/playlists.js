@@ -11,13 +11,13 @@ export default Ember.Route.extend({
   afterModel: function (model) {
     var firstPlaylistId = model.playlists.get('firstObject').get('playlistURI');
     var firstPlaylistTracks = this.get('store').query('track', {
-      uri: firstPlaylistId,
+      uri: firstPlaylistId
     });
     model.selectedPlaylist = model.playlists.get('firstObject').get('id');
     model.listTracks = firstPlaylistTracks;
   },
 
-  setupController: function(controller, model, transition) {
+  setupController: function (controller, model, transition) {
     this._super(controller, model);
     controller.set('model', model);
   }

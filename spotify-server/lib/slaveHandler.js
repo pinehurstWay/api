@@ -52,18 +52,24 @@ exports.setVolume = function (slaveName, volume) {
     })
 };
 
-exports.pause = function (slaveName, next) {
-    var ip = slaves[slaveName].ip;
-    slaves[slaveName].status = "PAUSED";
-    request.get("http://" + ip + ":9000/pause", function () {
-        next();
-    });
+exports.pause = function (slaveName) {
+    return new Promise((resolve, reject)=> {
+        var ip = slaves[slaveName].ip;
+        slaves[slaveName].status = "PAUSED";
+        request.get("http://" + ip + ":9000/pause", function () {
+            resolve();
+        });
+    })
 };
 
-exports.resume = function (slaveName, next) {
-    var ip = slaves[slaveName].ip;
-    slaves[slaveName].status = "PLAYING";
-    request.get("http://" + ip + ":9000/resume", function () {
-        next();
-    });
+exports.resume = function (slaveName) {
+    return new Promise((resolve, reject)=> {
+        var ip = slaves[slaveName].ip;
+        slaves[slaveName].status = "PLAYING";
+        request.get("http://" + ip + ":9000/resume", function () {
+            resolve();
+        });
+
+    })
+
 };

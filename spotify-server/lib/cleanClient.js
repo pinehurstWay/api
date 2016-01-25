@@ -260,12 +260,12 @@ class Spotify {
     }
 
     pause(slaves) {
-        return Promise.all(slaves.map(slave=>slaveHandler.pause(slave.name, slave.volume)));
+        return Promise.all(slaves.map(slave=>slaveHandler.pause(slave)));
 
     }
 
     resume(slaves) {
-        return Promise.all(slaves.map(slave=>slaveHandler.resume(slave.name, slave.volume)));
+        return Promise.all(slaves.map(slave=>slaveHandler.resume(slave)));
 
     }
 

@@ -3,20 +3,8 @@
 	"ip": "localhost",
     "queue": []
   },
-  "Ptipy": {
-	"ip": "10.0.0.90",
-    "queue": []
-  },
-  "Momo": {
-    "ip": "192.168.31.130",
-    "queue": []
-  },
-  "Damien": {
-    "ip": "192.168.1.77",
-    "queue": []
-  },
-  "MacSightCall": {
-    "ip": "192.168.1.151",
+  "windows10-salon": {
+    "ip": "10.0.0.7",
     "queue": []
   }
 }
