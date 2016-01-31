@@ -55,7 +55,8 @@ app.get('/spotify-server/playlists', function (req, res) {
     spotifyClientInstance.getPlayLists()
         .then(playlistsTemp=> {
             playlists = playlistsTemp;
-            if (!playlists[0].tracks) return spotifyClientInstance.getTracksForPlaylist(playlists["0"].playlistURI);
+            if (playlistsTemp.length == 0) return null;
+            else if (!playlists[0].tracks) return spotifyClientInstance.getTracksForPlaylist(playlists["0"].playlistURI);
             else return null;
         })
         .then(playlist0Tracks=> {

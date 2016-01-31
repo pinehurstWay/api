@@ -6,5 +6,9 @@
   "windows10-salon": {
     "ip": "10.0.0.7",
     "queue": []
+  },
+  "windows10-sylvain": {
+    "ip": "10.0.0.163",
+    "queue": []
   }
 }
